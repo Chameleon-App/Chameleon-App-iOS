@@ -1,0 +1,39 @@
+name: Chameleon
+variables:
+  appVersion: &app_version "0.1"
+options:
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  createIntermediateGroups: true
+  developmentLanguage: ru
+configs:
+  Debug: debug
+targets:
+  chameleon:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources/
+    settings:
+        base:
+            MARKETING_VERSION: *app_version
+            CURRENT_PROJECT_VERSION: "1"
+            SWIFT_VERSION: "5"
+            PRODUCT_NAME: Chameleon
+            PRODUCT_BUNDLE_IDENTIFIER: chameleon.chameleon-ios
+            CODE_SIGN_STYLE: Manual
+    info:
+      path: Sources/Configurations/Info.plist
+      properties:
+        UIRequiresFullScreen: true
+        UIStatusBarStyle: UIStatusBarStyleLightContent
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        CFBundleDisplayName: $(BUNDLE_DISPLAY_NAME)
+        UIApplicationSupportsIndirectInputEvents: true
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: *app_version
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+    configFiles:
+      Debug: Sources/Configurations/DebugConfiguration.xcconfig
