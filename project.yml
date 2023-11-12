@@ -37,3 +37,14 @@ targets:
         LSRequiresIPhoneOS: true
     configFiles:
       Debug: Sources/Configurations/DebugConfiguration.xcconfig
+    preBuildScripts:
+      - script: |
+                export PATH="$PATH:/opt/homebrew/bin"
+
+                if which swiftlint >/dev/null; then
+                  swiftlint --config swiftlint.yml
+                else
+                  echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+                fi
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
