@@ -1,6 +1,6 @@
 //
 //  LaunchViewModel.swift
-//  polkadot-mobile
+//  chameleon
 //
 //  Created by Ilia Chub on 23.01.2023.
 //

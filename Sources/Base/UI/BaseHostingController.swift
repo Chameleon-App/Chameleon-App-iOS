@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class HostingController<Content: View>: UIViewController, Navigatable {
+class BaseHostingController<Content: View>: UIViewController, Navigatable {
     let controller: UIHostingController<Content>?
     
     var navigationBarModel: NavigationBarModel = .default { didSet { configureNavigationBar() } }
