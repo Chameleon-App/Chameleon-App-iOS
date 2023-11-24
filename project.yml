@@ -48,3 +48,9 @@ targets:
                 fi
         name: SwiftLint
         basedOnDependencyAnalysis: false
+    dependencies:
+      - package: Utils
+packages:
+  Utils:
+    url: https://github.com/MobileUpLLC/Utils
+    exactVersion: 0.3.1
