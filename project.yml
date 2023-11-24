@@ -35,6 +35,13 @@ targets:
         CFBundleShortVersionString: *app_version
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
+        UILaunchStoryboardName: LaunchScreen
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
     configFiles:
       Debug: Sources/Configurations/DebugConfiguration.xcconfig
     preBuildScripts:
@@ -50,7 +57,12 @@ targets:
         basedOnDependencyAnalysis: false
     dependencies:
       - package: Utils
+      - package: SnapKit
 packages:
   Utils:
     url: https://github.com/MobileUpLLC/Utils
     exactVersion: 0.3.1
+  SnapKit:
+    url: https://github.com/SnapKit/SnapKit.git
+    exactVersion: 5.6.0
+
