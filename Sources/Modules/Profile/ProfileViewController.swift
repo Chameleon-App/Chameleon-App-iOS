@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileViewController: BaseHostingController<ProfileView> {
+final class ProfileViewController: BaseHostingController<ProfileView> {
     init(viewModel: ProfileViewModel) {
         super.init(rootView: ProfileView(viewModel: viewModel))
     }

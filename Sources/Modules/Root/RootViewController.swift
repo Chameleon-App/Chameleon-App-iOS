@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RootViewController: BaseViewController {
+final class RootViewController: BaseViewController {
     let viewModel: RootViewModel
     
     override func viewDidLoad() {

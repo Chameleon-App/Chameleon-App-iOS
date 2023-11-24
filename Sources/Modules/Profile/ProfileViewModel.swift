@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class ProfileViewModel: ObservableObject {
+final class ProfileViewModel: ObservableObject {
     private var coordinator: ProfileCoordinator
 
     init(coordinator: ProfileCoordinator) {

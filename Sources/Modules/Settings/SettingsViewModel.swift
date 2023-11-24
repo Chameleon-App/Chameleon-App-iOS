@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class SettingsViewModel: ObservableObject {
+final class SettingsViewModel: ObservableObject {
     private var coordinator: SettingsCoordinator
 
     init(coordinator: SettingsCoordinator) {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SettingsViewController: BaseHostingController<SettingsView> {
+final class SettingsViewController: BaseHostingController<SettingsView> {
     init(viewModel: SettingsViewModel) {
         super.init(rootView: SettingsView(viewModel: viewModel))
     }

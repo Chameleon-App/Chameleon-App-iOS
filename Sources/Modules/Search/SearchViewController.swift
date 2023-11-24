@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchViewController: BaseHostingController<SearchView> {
+final class SearchViewController: BaseHostingController<SearchView> {
     init(viewModel: SearchViewModel) {
         super.init(rootView: SearchView(viewModel: viewModel))
     }

@@ -5,7 +5,7 @@
 //  Created by Ilia Chub on 22.01.2023.
 //
 
-enum RootFactory {
+final class RootFactory {
     static func createRootViewController() -> RootViewController {
         let coordinator = RootCoordinator()
         let viewModel = RootViewModel(coordinator: coordinator)

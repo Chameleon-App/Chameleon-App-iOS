@@ -5,7 +5,7 @@
 //  Created by Ilia Chub on 22.01.2023.
 //
 
-class RootViewModel {
+final class RootViewModel {
     private var coordinator: RootCoordinator
 
     init(coordinator: RootCoordinator) {

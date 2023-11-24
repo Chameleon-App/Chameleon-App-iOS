@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class SearchViewModel: ObservableObject {
+final class SearchViewModel: ObservableObject {
     private var coordinator: SearchCoordinator
 
     init(coordinator: SearchCoordinator) {
