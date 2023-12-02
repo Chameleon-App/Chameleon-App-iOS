@@ -13,16 +13,20 @@ typealias ServerClientServiceResult<ReturnValue> = Result<ReturnValue, ServerCli
 typealias ServerClientServiceRequestParameters = Encodable
 typealias ServerClientServiceRequestHeaders = HTTPHeaders
 
+struct EmptyParameters: Codable {}
+
 final class ServerClientService {
-    let serverBaseUrl: String
+    static let shared = ServerClientService()
+    
+    private let serverBaseUrl: String
     
     init() {
         serverBaseUrl = Environment.serverBaseUrl
     }
-
+    
     func get<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
-        parameters: Parameters? = nil,
+        parameters: Parameters = EmptyParameters(),
         headers: ServerClientServiceRequestHeaders? = nil
     ) async -> ServerClientServiceResult<ReturnValue> {
         return await performRequest(
@@ -36,7 +40,7 @@ final class ServerClientService {
     
     func post<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
-        parameters: Parameters? = nil,
+        parameters: Parameters = EmptyParameters(),
         headers: ServerClientServiceRequestHeaders? = nil
     ) async -> ServerClientServiceResult<ReturnValue> {
         return await performRequest(
@@ -51,7 +55,7 @@ final class ServerClientService {
     private func performRequest<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
         method: HTTPMethod,
-        parameters: Parameters?,
+        parameters: Parameters? = nil,
         encoder: ParameterEncoder,
         headers: ServerClientServiceRequestHeaders?
     ) async -> ServerClientServiceResult<ReturnValue> {
