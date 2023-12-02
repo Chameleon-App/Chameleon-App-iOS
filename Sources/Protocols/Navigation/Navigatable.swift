@@ -143,4 +143,3 @@ fileprivate extension UIViewController {
         self.navigationBarModel.rightItemsModels[sender.tag].onTapAction?()
     }
 }
-

@@ -11,7 +11,7 @@ struct SearchView: View {
     @ObservedObject var viewModel: SearchViewModel
     
     var body: some View {
-        Color.green
+        Color.pink
             .ignoresSafeArea()
     }
 }

@@ -69,4 +69,3 @@ final class NavigationBarCentralItemView: BaseView {
         model.onTapAction?()
     }
 }
-
