@@ -56,7 +56,7 @@ class CalendarViewModel: ObservableObject {
             return handleError(ServerClientServiceError(.unknown))
         }
         
-        let contentViewItem = CalendarContentViewItem(pantonesOfDay: pantonesOfDayViewItem)
+        let contentViewItem = CalendarContentViewItem(pantonesOfDay: pantonesOfDayViewItem, addPhotoHandleClosure: {})
         let contentViewState = CalendarViewState.content(contentViewItem)
         
         updateViewState(to: contentViewState)

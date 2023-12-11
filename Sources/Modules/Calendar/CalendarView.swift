@@ -32,6 +32,11 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let addPhotoHandleClosure: Closure.Void
+    
+    static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
+        return lhs.pantonesOfDay == rhs.pantonesOfDay
+    }
 }
 
 struct CalendarErrorViewItem {
@@ -62,7 +67,7 @@ private struct CalendarLoaingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay)
+            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay, addPhotoHandleClosure: nil)
             Spacer()
             ProgressView()
             Spacer()
@@ -75,7 +80,10 @@ private struct CalendarContentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay)
+            CalendarHeaderView(
+                pantonesOfDay: viewItem.pantonesOfDay,
+                addPhotoHandleClosure: viewItem.addPhotoHandleClosure
+            )
             Spacer()
         }
     }
@@ -83,14 +91,22 @@ private struct CalendarContentView: View {
 
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let addPhotoHandleClosure: Closure.Void?
     
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
                 .frame(height: 50)
             HStack(alignment: .top) {
+                if let addPhotoHandleClosure {
+                    CalendarAddPhotoView(addPhotoHandleClosure: addPhotoHandleClosure, width: 75)
+                } else {
+                    Spacer()
+                        .frame(width: 75)
+                }
                 Spacer()
-                Color(.placeholderPrimary)
+                    .frame(width: 18)
+                Color(.borderPrimary)
                     .frame(width: 1, height: 75)
                 Spacer()
                     .frame(width: 18)
@@ -99,8 +115,33 @@ private struct CalendarHeaderView: View {
             .padding(.horizontal, 10)
             Spacer()
                 .frame(height: 10)
-            Color(.placeholderPrimary)
+            Color(.borderPrimary)
                 .frame(height: 1)
         }
+    }
+}
+
+private struct CalendarAddPhotoView: View {
+    private enum Constants {
+        static let addPhotosTitleKey = "addPhotoTitle"
+    }
+    
+    let addPhotoHandleClosure: Closure.Void
+    let width: CGFloat
+    
+    var body: some View {
+        VStack(spacing: 5) {
+            ZStack {
+                Circle()
+                    .stroke(Color(.borderPrimary), lineWidth: 2)
+                    .frame(width: width, height: width)
+                Image(.ic32Camera)
+            }
+            Text(String(localized: String.LocalizationValue(Constants.addPhotosTitleKey)))
+                .font(.bodySmall)
+                .lineLimit(3)
+                .multilineTextAlignment(.center)
+        }
+        .frame(width: width)
     }
 }
