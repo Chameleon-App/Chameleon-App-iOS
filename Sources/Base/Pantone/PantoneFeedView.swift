@@ -31,9 +31,8 @@ struct PantoneFeedView: View {
             viewItem.color
                 .clipShape(.circle)
                 .aspectRatio(1, contentMode: .fit)
-            
             if let name = viewItem.name {
-                Text(name)
+                Text(name.capitalized)
                     .font(.bodySmall)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)

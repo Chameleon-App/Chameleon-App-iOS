@@ -86,13 +86,21 @@ private struct CalendarHeaderView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: 50)
-            
-            HStack {
+            Spacer()
+                .frame(height: 50)
+            HStack(alignment: .top) {
                 Spacer()
+                Color(.placeholderPrimary)
+                    .frame(width: 1, height: 75)
+                Spacer()
+                    .frame(width: 18)
                 TriplePantoneFeedView(viewItem: pantonesOfDay, pantoneWidth: 75)
             }
             .padding(.horizontal, 10)
+            Spacer()
+                .frame(height: 10)
+            Color(.placeholderPrimary)
+                .frame(height: 1)
         }
     }
 }
