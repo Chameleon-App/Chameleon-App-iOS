@@ -98,12 +98,14 @@ private struct CalendarHeaderView: View {
             Spacer()
                 .frame(height: 50)
             HStack(alignment: .top) {
-                if let addPhotoHandleClosure {
-                    CalendarAddPhotoView(addPhotoHandleClosure: addPhotoHandleClosure, width: 75)
-                } else {
-                    Spacer()
-                        .frame(width: 75)
+                Group {
+                    if let addPhotoHandleClosure {
+                        CalendarAddPhotoView(addPhotoHandleClosure: addPhotoHandleClosure)
+                    } else {
+                        Spacer()
+                    }
                 }
+                .frame(width: 75)
                 Spacer()
                     .frame(width: 18)
                 Color(.borderPrimary)
@@ -127,14 +129,13 @@ private struct CalendarAddPhotoView: View {
     }
     
     let addPhotoHandleClosure: Closure.Void
-    let width: CGFloat
     
     var body: some View {
         VStack(spacing: 5) {
             ZStack {
                 Circle()
                     .stroke(Color(.borderPrimary), lineWidth: 2)
-                    .frame(width: width, height: width)
+                    .aspectRatio(1, contentMode: .fit)
                 Image(.ic32Camera)
             }
             Text(String(localized: String.LocalizationValue(Constants.addPhotosTitleKey)))
@@ -142,6 +143,5 @@ private struct CalendarAddPhotoView: View {
                 .lineLimit(3)
                 .multilineTextAlignment(.center)
         }
-        .frame(width: width)
     }
 }
