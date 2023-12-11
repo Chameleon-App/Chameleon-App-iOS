@@ -8,6 +8,8 @@
 import UIKit
 
 class CalendarViewController: BaseHostingController<CalendarView> {
+    override var isNavigationBarHidden: Bool { true }
+    
     init(viewModel: CalendarViewModel) {
         super.init(rootView: CalendarView(viewModel: viewModel))
     }

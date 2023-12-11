@@ -8,33 +8,55 @@
 import SwiftUI
 
 class CalendarViewModel: ObservableObject {
+    private enum Constants {
+        static let defaultPantoneTitleKey = "defaultPantoneTitle"
+    }
+    
     @Published private(set) var viewState: CalendarViewState
     
-    private let serverHealthRepository: ServerHealthRepository
+    private let pantonesRepository: PantonesRepository
     
     private var coordinator: CalendarCoordinator
 
     init(coordinator: CalendarCoordinator) {
-        self.serverHealthRepository = ServerHealthRepository()
+        self.pantonesRepository = PantonesRepository()
         self.coordinator = coordinator
-        self.viewState = .loading
+        
+        let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
+        let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
+        
+        let calendarLoadingViewItem = CalendarLoadingViewItem(
+            pantonesOfDay: TriplePantoneFeedViewItem(
+                left: pantoneOfDayPlaceholder,
+                middle: pantoneOfDayPlaceholder,
+                right: pantoneOfDayPlaceholder
+            )
+        )
+        
+        self.viewState = .loading(calendarLoadingViewItem)
     }
     
     func handleViewDidAppear() {
-        Task { await configureIsServerHealth() }
+        Task { await configurePantonesOfDay() }
     }
     
-    private func configureIsServerHealth() async {
-        switch await serverHealthRepository.getServerHealth() {
-        case .success(let serverHealth):
-            handleSeccessResult(serverHealth: serverHealth)
+    private func configurePantonesOfDay() async {
+        switch await pantonesRepository.getPantonesOfDay() {
+        case .success(let pantonesOfDay):
+            handleSeccessResult(pantonesOfDay: pantonesOfDay)
         case .failure(let error):
             handleError(error)
         }
     }
     
-    private func handleSeccessResult(serverHealth successResult: ServerHealthModel) {
-        let contentViewItem = CalendarContentViewItem(isServerHealth: successResult.isHealth)
+    private func handleSeccessResult(pantonesOfDay successResult: PantonesOfDayModel) {
+        guard let pantonesOfDayViewItem = mapPantonesOfDayToTriplePantoneFeedViewItem(
+            pantonesOfDay: successResult
+        ) else {
+            return handleError(ServerClientServiceError(.unknown))
+        }
+        
+        let contentViewItem = CalendarContentViewItem(pantonesOfDay: pantonesOfDayViewItem)
         let contentViewState = CalendarViewState.content(contentViewItem)
         
         updateViewState(to: contentViewState)
@@ -50,5 +72,26 @@ class CalendarViewModel: ObservableObject {
     
     private func updateViewState(to newViewState: CalendarViewState) {
         Task { @MainActor in self.viewState = newViewState }
+    }
+    
+    private func mapPantonesOfDayToTriplePantoneFeedViewItem(
+        pantonesOfDay: PantonesOfDayModel
+    ) -> TriplePantoneFeedViewItem? {
+        if pantonesOfDay.pantones.count != TriplePantoneFeedView.Constants.countOfPantones {
+            return nil
+        }
+        
+        let leftPantone = pantonesOfDay.pantones[0]
+        let leftPantoneViewItem = PantoneFeedViewItem(hex: leftPantone.hex, name: leftPantone.name)
+        let middlePantone = pantonesOfDay.pantones[1]
+        let middlePantoneViewItem = PantoneFeedViewItem(hex: middlePantone.hex, name: middlePantone.name)
+        let rightPantone = pantonesOfDay.pantones[2]
+        let rightPantoneViewItem = PantoneFeedViewItem(hex: rightPantone.hex, name: rightPantone.name)
+        
+        return TriplePantoneFeedViewItem(
+            left: leftPantoneViewItem,
+            middle: middlePantoneViewItem,
+            right: rightPantoneViewItem
+        )
     }
 }
