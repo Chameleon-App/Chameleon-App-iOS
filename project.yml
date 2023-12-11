@@ -26,6 +26,7 @@ targets:
     info:
       path: Sources/Configurations/Info.plist
       properties:
+        SERVER_BASE_URL: $(SERVER_BASE_URL)
         UIRequiresFullScreen: true
         UIStatusBarStyle: UIStatusBarStyleLightContent
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
@@ -36,6 +37,8 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
         UILaunchStoryboardName: LaunchScreen
+        NSAppTransportSecurity:
+            NSAllowsArbitraryLoads: YES
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations:
@@ -69,4 +72,3 @@ packages:
   Alamofire:
     url: https://github.com/Alamofire/Alamofire.git
     exactVersion: 5.8.1
-
