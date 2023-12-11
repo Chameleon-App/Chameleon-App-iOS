@@ -18,6 +18,23 @@
         }
       }
     },
+    "defaultPantoneTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantone"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantone"
+          }
+        }
+      }
+    },
     "profileTabTitle" : {
       "extractionState" : "manual",
       "localizations" : {
