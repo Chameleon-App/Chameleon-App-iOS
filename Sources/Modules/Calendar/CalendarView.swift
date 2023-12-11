@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 enum CalendarViewState: Equatable {
     case loading(CalendarLoadingViewItem)
@@ -32,6 +33,11 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
+    
+    static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
+        return lhs.pantonesOfDay == rhs.pantonesOfDay
+    }
 }
 
 struct CalendarErrorViewItem {
@@ -62,7 +68,7 @@ private struct CalendarLoaingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay)
+            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay, addPhotoHandleClosure: nil)
             Spacer()
             ProgressView()
             Spacer()
@@ -75,7 +81,10 @@ private struct CalendarContentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay)
+            CalendarHeaderView(
+                pantonesOfDay: viewItem.pantonesOfDay,
+                addPhotoHandleClosure: viewItem.addPhotoHandleClosure
+            )
             Spacer()
         }
     }
@@ -83,14 +92,24 @@ private struct CalendarContentView: View {
 
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
     
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
                 .frame(height: 50)
             HStack(alignment: .top) {
+                Group {
+                    if let addPhotoHandleClosure {
+                        CalendarAddPhotoView(addPhotoHandleClosure: addPhotoHandleClosure)
+                    } else {
+                        Spacer()
+                    }
+                }
+                .frame(width: 75)
                 Spacer()
-                Color(.placeholderPrimary)
+                    .frame(width: 18)
+                Color(.borderPrimary)
                     .frame(width: 1, height: 75)
                 Spacer()
                     .frame(width: 18)
@@ -99,8 +118,41 @@ private struct CalendarHeaderView: View {
             .padding(.horizontal, 10)
             Spacer()
                 .frame(height: 10)
-            Color(.placeholderPrimary)
+            Color(.borderPrimary)
                 .frame(height: 1)
+        }
+    }
+}
+
+private struct CalendarAddPhotoView: View {
+    private enum Constants {
+        static let addPhotosTitleKey = "addPhotoTitle"
+    }
+    
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>
+    
+    @State private var selectedPhotoItem: PhotosPickerItem?
+    
+    var body: some View {
+        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
+            VStack(spacing: 5) {
+                ZStack {
+                    Circle()
+                        .stroke(Color(.borderPrimary), lineWidth: 2)
+                        .aspectRatio(1, contentMode: .fit)
+                    Image(.ic32Camera)
+                }
+                Text(String(localized: String.LocalizationValue(Constants.addPhotosTitleKey)))
+                    .foregroundStyle(Color(.textPrimary))
+                    .font(.bodySmall)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .photosPickerDisabledCapabilities(.collectionNavigation)
+        .onChange(of: selectedPhotoItem) {
+            selectedPhotoItem = nil
+            addPhotoHandleClosure(selectedPhotoItem)
         }
     }
 }

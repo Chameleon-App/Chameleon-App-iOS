@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 class CalendarViewModel: ObservableObject {
     private enum Constants {
@@ -56,7 +57,12 @@ class CalendarViewModel: ObservableObject {
             return handleError(ServerClientServiceError(.unknown))
         }
         
-        let contentViewItem = CalendarContentViewItem(pantonesOfDay: pantonesOfDayViewItem)
+        let contentViewItem = CalendarContentViewItem(
+            pantonesOfDay: pantonesOfDayViewItem,
+            addPhotoHandleClosure: { [weak self] in
+                self?.handleAddPhotoButtonDidTap(selectedPhoto: $0)
+            }
+        )
         let contentViewState = CalendarViewState.content(contentViewItem)
         
         updateViewState(to: contentViewState)
@@ -93,5 +99,28 @@ class CalendarViewModel: ObservableObject {
             middle: middlePantoneViewItem,
             right: rightPantoneViewItem
         )
+    }
+    
+    private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem?) {
+        guard let selectedPhoto else {
+            return
+        }
+        
+        Task {
+            await handleAddPhotoButtonDidTap(selectedPhoto: selectedPhoto)
+        }
+    }
+    
+    // TODO: Add error handling when a photo loading is ready
+    private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem) async {
+        do {
+            guard let imageData = try await selectedPhoto.loadTransferable(type: Data.self) else {
+                return
+            }
+            
+            print(imageData.base64EncodedString())
+        } catch {
+            print(error)
+        }
     }
 }

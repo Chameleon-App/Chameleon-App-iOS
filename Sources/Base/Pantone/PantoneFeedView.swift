@@ -34,7 +34,7 @@ struct PantoneFeedView: View {
             if let name = viewItem.name {
                 Text(name.capitalized)
                     .font(.bodySmall)
-                    .lineLimit(2)
+                    .lineLimit(3)
                     .multilineTextAlignment(.center)
             }
         }
