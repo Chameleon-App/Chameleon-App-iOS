@@ -1,20 +1,19 @@
 //
-//  ColorFeedView.swift
+//  PantoneFeedView.swift
 //  chameleon
 //
 //  Created by Ilia Chub on 11.12.2023.
 //
 
 import SwiftUI
-import Foundation
 
-struct ColorFeedViewItem {
+struct PantoneFeedViewItem {
     let hex: String
     let name: String?
 }
 
-struct ColorFeedView: View {
-    let viewItem: ColorFeedViewItem
+struct PantoneFeedView: View {
+    let viewItem: PantoneFeedViewItem
     
     var body: some View {
         VStack(spacing: 5) {
