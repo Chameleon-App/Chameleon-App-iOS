@@ -22,7 +22,7 @@ struct TriplePantoneFeedView: View {
     let pantoneWidth: CGFloat
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             PantoneFeedView(viewItem: viewItem.left, width: pantoneWidth)
             PantoneFeedView(viewItem: viewItem.middle, width: pantoneWidth)
             PantoneFeedView(viewItem: viewItem.right, width: pantoneWidth)
