@@ -9,10 +9,8 @@ import Foundation
 
 struct PantonesOfDayModel: Decodable {
     let pantones: [PantoneModel]
-//    let date: Date
     
     enum CodingKeys: String, CodingKey {
         case pantones = "colors"
-//        case date
     }
 }
