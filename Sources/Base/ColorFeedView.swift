@@ -21,6 +21,7 @@ struct ColorFeedView: View {
             Color(hex: viewItem.hex)
                 .clipShape(.circle)
                 .aspectRatio(1, contentMode: .fit)
+            
             if let name = viewItem.name {
                 Text(name)
                     .font(.bodySmall)
