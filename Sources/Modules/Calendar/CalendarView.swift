@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 enum CalendarViewState: Equatable {
     case loading(CalendarLoadingViewItem)
@@ -130,18 +131,23 @@ private struct CalendarAddPhotoView: View {
     
     let addPhotoHandleClosure: Closure.Void
     
+    @State var item: PhotosPickerItem?
+    
     var body: some View {
-        VStack(spacing: 5) {
-            ZStack {
-                Circle()
-                    .stroke(Color(.borderPrimary), lineWidth: 2)
-                    .aspectRatio(1, contentMode: .fit)
-                Image(.ic32Camera)
+        PhotosPicker(selection: $item) {
+            VStack(spacing: 5) {
+                ZStack {
+                    Circle()
+                        .stroke(Color(.borderPrimary), lineWidth: 2)
+                        .aspectRatio(1, contentMode: .fit)
+                    Image(.ic32Camera)
+                }
+                Text(String(localized: String.LocalizationValue(Constants.addPhotosTitleKey)))
+                    .foregroundStyle(Color(.textPrimary))
+                    .font(.bodySmall)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
             }
-            Text(String(localized: String.LocalizationValue(Constants.addPhotosTitleKey)))
-                .font(.bodySmall)
-                .lineLimit(3)
-                .multilineTextAlignment(.center)
         }
     }
 }
