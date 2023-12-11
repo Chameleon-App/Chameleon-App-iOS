@@ -33,7 +33,7 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let addPhotoHandleClosure: Closure.Void
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
         return lhs.pantonesOfDay == rhs.pantonesOfDay
@@ -92,7 +92,7 @@ private struct CalendarContentView: View {
 
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let addPhotoHandleClosure: Closure.Void?
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -129,12 +129,12 @@ private struct CalendarAddPhotoView: View {
         static let addPhotosTitleKey = "addPhotoTitle"
     }
     
-    let addPhotoHandleClosure: Closure.Void
+    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>
     
-    @State var item: PhotosPickerItem?
+    @State private var selectedPhotoItem: PhotosPickerItem?
     
     var body: some View {
-        PhotosPicker(selection: $item, matching: .images) {
+        PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
             VStack(spacing: 5) {
                 ZStack {
                     Circle()
@@ -150,5 +150,8 @@ private struct CalendarAddPhotoView: View {
             }
         }
         .photosPickerDisabledCapabilities(.collectionNavigation)
+        .onChange(of: selectedPhotoItem) {
+            addPhotoHandleClosure(selectedPhotoItem)
+        }
     }
 }
