@@ -111,10 +111,11 @@ class CalendarViewModel: ObservableObject {
         }
     }
     
+    // TODO: Add error handling when a photo loading is ready
     private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem) async {
         do {
             guard let imageData = try await selectedPhoto.loadTransferable(type: Data.self) else {
-                return print("error")
+                return
             }
             
             print(imageData.base64EncodedString())
