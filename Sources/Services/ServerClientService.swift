@@ -75,6 +75,8 @@ final class ServerClientService {
         case .success(let returnValue):
             return .success(returnValue)
         case .failure(let rawError):
+            print(String(describing: rawError))
+            
             let errorCode: ServerClientServiceError.Code
             
             if let rawErrorCode = rawError.responseCode {
