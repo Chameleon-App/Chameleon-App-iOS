@@ -134,7 +134,7 @@ private struct CalendarAddPhotoView: View {
     @State var item: PhotosPickerItem?
     
     var body: some View {
-        PhotosPicker(selection: $item) {
+        PhotosPicker(selection: $item, matching: .images) {
             VStack(spacing: 5) {
                 ZStack {
                     Circle()
@@ -149,5 +149,6 @@ private struct CalendarAddPhotoView: View {
                     .multilineTextAlignment(.center)
             }
         }
+        .photosPickerDisabledCapabilities(.collectionNavigation)
     }
 }
