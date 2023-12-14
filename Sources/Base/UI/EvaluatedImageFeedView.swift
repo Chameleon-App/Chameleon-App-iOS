@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct EvaluationFeedImageViewItem {
+struct EvaluationFeedImageViewItem: Identifiable {
+    let id: Int
     let url: URL?
     let points: Int
     let date: Date?

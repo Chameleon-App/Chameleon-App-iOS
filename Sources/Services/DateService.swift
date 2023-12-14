@@ -8,6 +8,10 @@
 import Foundation
 
 final class DateService {
+    enum Constants {
+        static let backendDateFormat = "yyyy-MM-dd"
+    }
+    
     enum DateFormats {
         case monthAndDate
         case custom(format: String)
@@ -42,4 +46,3 @@ final class DateService {
         return dateFormatter
     }
 }
-
