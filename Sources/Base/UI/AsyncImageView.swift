@@ -16,6 +16,11 @@ struct AsyncImageView: View {
     let url: URL?
     let rounding: AsyncImageRounding?
     
+    init(url: URL?, rounding: AsyncImageRounding? = nil) {
+        self.url = url
+        self.rounding = rounding
+    }
+    
     var body: some View {
         AsyncImage(url: url) {
             $0
