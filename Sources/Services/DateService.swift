@@ -28,24 +28,6 @@ final class DateService {
         return getFormattedDate(date: date, format: format)
     }
     
-    static private func getDayMonthTimeDate(date: Date) -> String? {
-        let formatter = getDateFormatter()
-        
-        formatter.dateFormat = "MMM"
-        
-        let month = formatter.string(from: date).lowercased()
-        
-        formatter.dateFormat = "dd"
-        
-        let day = formatter.string(from: date)
-        
-        formatter.dateFormat = "HH:mm"
-        
-        let hoursAndMinutes = formatter.string(from: date)
-        
-        return day + .space + month + .space + hoursAndMinutes
-    }
-    
     static private func getCustomDate(date: Date, format: String) -> String? {
         let formatter = getDateFormatter()
         formatter.dateFormat = format
