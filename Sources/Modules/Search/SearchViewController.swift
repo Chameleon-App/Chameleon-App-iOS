@@ -8,6 +8,8 @@
 import UIKit
 
 final class SearchViewController: BaseHostingController<SearchView> {
+    override var isNavigationBarHidden: Bool { true }
+    
     init(viewModel: SearchViewModel) {
         super.init(rootView: SearchView(viewModel: viewModel))
     }
