@@ -27,7 +27,7 @@ struct SearchView: View {
         case .content(let contentViewItem):
             SearchContentView(viewItem: contentViewItem)
         case .error:
-            Color.red
+            SearchErrorView()
         }
     }
 }
@@ -51,13 +51,22 @@ private struct SearchContentView: View {
         ]
 
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 2) {
+            LazyVGrid(columns: columns, spacing: 1) {
                 ForEach(viewItem.photos) {
                     EvaluatedImageFeedView(viewItem: $0)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
+            .padding(.bottom, 20)
         }
         .padding(.horizontal, 1)
+    }
+}
+
+private struct SearchErrorView: View {
+    var body: some View {
+        VStack {
+            Image(.ic64NetworkError)
+        }
     }
 }
