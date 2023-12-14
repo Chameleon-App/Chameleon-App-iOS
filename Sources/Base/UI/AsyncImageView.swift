@@ -2,7 +2,7 @@
 //  AsyncImageView.swift
 //  chameleon
 //
-//  Created by Илья Чуб on 15.12.2023.
+//  Created by Ilia Chub on 15.12.2023.
 //
 
 import SwiftUI
