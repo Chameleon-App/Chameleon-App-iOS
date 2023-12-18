@@ -8,10 +8,15 @@
 import SwiftUI
 
 final class LoginViewModel: ObservableObject {
+    @Published var usernameInputText: String
+    @Published var isUsernameValid: Bool
+    
     private var coordinator: LoginCoordinator
 
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
+        self.usernameInputText = .empty
+        self.isUsernameValid = true
     }
     
     func handleLoginButtonDidTap() {
