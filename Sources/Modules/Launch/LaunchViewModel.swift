@@ -33,6 +33,6 @@ final class LaunchViewModel: ObservableObject {
     }
     
     private func getIsUserAuthenticated() -> Bool {
-        return authenticationRepository.getAuthenticationKey()
+        return authenticationRepository.getIsUserAuthenticated()
     }
 }

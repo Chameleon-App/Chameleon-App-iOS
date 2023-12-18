@@ -5,6 +5,8 @@
 //  Created by Ilia Chub on 18.12.2023.
 //
 
+import Foundation
+
 final class AuthenticationRepository {
     private enum Constants {
         static let authenticationKeyUserDefaultsKey = "authenticationKey"

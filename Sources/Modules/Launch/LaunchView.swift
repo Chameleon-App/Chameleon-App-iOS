@@ -13,6 +13,6 @@ struct LaunchView: View {
     var body: some View {
         Color(.backgroundPrimary)
             .edgesIgnoringSafeArea(.all)
-            .onAppear { handleViewDidAppear() }
+            .onAppear { viewModel.handleViewDidAppear() }
     }
 }
