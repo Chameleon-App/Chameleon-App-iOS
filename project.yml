@@ -62,6 +62,7 @@ targets:
       - package: Utils
       - package: SnapKit
       - package: Alamofire
+      - package: FormView
 packages:
   Utils:
     url: https://github.com/MobileUpLLC/Utils
@@ -72,3 +73,6 @@ packages:
   Alamofire:
     url: https://github.com/Alamofire/Alamofire.git
     exactVersion: 5.8.1
+  FormView:
+    url: https://github.com/MobileUpLLC/FormView
+    exactVersion: 1.1.2
