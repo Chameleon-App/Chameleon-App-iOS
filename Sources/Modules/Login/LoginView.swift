@@ -20,58 +20,64 @@ struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
     
     var body: some View {
-        ScrollView {
-            ZStack {
-                VStack(alignment: .center) {
-                    Color(.backgroundAccent)
-                        .ignoresSafeArea()
-                        .frame(height: 180)
-                    Spacer()
-                        .frame(height: 8)
-                    HStack {
-                        Text(String(localized: String.LocalizationValue(Constants.loginTitleKey)))
-                            .font(.headingPrimary)
-                            .padding(.horizontal, 14)
+        ZStack {
+            ScrollView {
+                ZStack {
+                    VStack(alignment: .center) {
+                        Color(.backgroundAccent)
+                            .ignoresSafeArea()
+                            .frame(height: 180)
+                        Spacer()
+                            .frame(height: 8)
+                        HStack {
+                            Text(String(localized: String.LocalizationValue(Constants.loginTitleKey)))
+                                .font(.headingPrimary)
+                                .padding(.horizontal, 14)
+                            Spacer()
+                        }
+                        Spacer()
+                            .frame(height: 34)
+                        TextFieldView(
+                            inputText: $viewModel.usernameInputText,
+                            isInputTextValid: viewModel.isUsernameValid,
+                            headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                            placeholderText: String(
+                                localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                            ),
+                            validationRules: viewModel.getLoginValidationRules(),
+                            handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
+                        )
+                        .padding(.horizontal, 12)
+                    }
+                    VStack {
+                        Spacer()
+                            .frame(height: 110)
+                        HStack {
+                            Image(.chameleon)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 14)
                         Spacer()
                     }
-                    Spacer()
-                        .frame(height: 34)
-                    TextFieldView(
-                        inputText: $viewModel.usernameInputText,
-                        isInputTextValid: viewModel.isUsernameValid,
-                        headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
-                        placeholderText: String(
-                            localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
-                        ),
-                        validationRules: viewModel.getLoginValidationRules(),
-                        handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
-                    )
-                    .padding(.horizontal, 12)
-                    ButtonView(
-                        styleType: .primary,
-                        content: String(localized: String.LocalizationValue(Constants.loginTitleKey)),
-                        action: viewModel.handleLoginButtonDidTap
-                    )
-                    .padding(.horizontal, 62)
-                    .disabled(viewModel.isLoginButtonDisabled)
-                    Spacer()
-                        .frame(height: 12)
-                    Text(getSignupTitle())
-                        .font(.bodySmall)
-                        .onTapGesture(perform: viewModel.handleSignupButtonDidTap)
-                    Spacer()
-                        .frame(height: 54)
                 }
-                VStack {
-                    Spacer()
-                        .frame(height: 110)
-                    HStack {
-                        Image(.chameleon)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 14)
-                    Spacer()
-                }
+            }
+            .ignoresSafeArea()
+            VStack {
+                Spacer()
+                ButtonView(
+                    styleType: .primary,
+                    content: String(localized: String.LocalizationValue(Constants.loginTitleKey)),
+                    action: viewModel.handleLoginButtonDidTap
+                )
+                .padding(.horizontal, 62)
+                .disabled(viewModel.isLoginButtonDisabled)
+                Spacer()
+                    .frame(height: 12)
+                Text(getSignupTitle())
+                    .font(.bodySmall)
+                    .onTapGesture(perform: viewModel.handleSignupButtonDidTap)
+                Spacer()
+                    .frame(height: 54)
             }
         }
     }
