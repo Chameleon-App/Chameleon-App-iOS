@@ -13,6 +13,8 @@ struct LoginView: View {
         static let loginTitleKey = "loginTitle"
         static let signupTitleKey = "loginScreenSignupTitle"
         static let signupColoredPartTitleKey = "loginScreenSignupColoredPartTitle"
+        static let usernameTitleKey = "usernameTitle"
+        static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
     }
     
     @ObservedObject var viewModel: LoginViewModel
@@ -37,9 +39,11 @@ struct LoginView: View {
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
                         isInputTextValid: viewModel.isUsernameValid,
-                        headerText: "Username",
-                        placeholderText: "You username",
-                        validationRules: [.minLength(count: 1, message: "Min lenght: 1")],
+                        headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getLoginValidationRules(),
                         handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
                     )
                     .padding(.horizontal, 12)
@@ -49,6 +53,7 @@ struct LoginView: View {
                         action: viewModel.handleLoginButtonDidTap
                     )
                     .padding(.horizontal, 62)
+                    .disabled(viewModel.isLoginButtonDisabled)
                     Spacer()
                         .frame(height: 12)
                     Text(getSignupTitle())

@@ -66,6 +66,7 @@ struct ButtonViewStyle: ButtonStyle {
             .background(backgroundColor)
             .font(.bodyBig)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .animation(.default, value: isEnabled)
     }
     
     static func get(styleType: ButtonViewStyleType) -> Self {
