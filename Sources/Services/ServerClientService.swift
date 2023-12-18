@@ -21,7 +21,7 @@ final class ServerClientService {
     private let serverBaseUrl: String
     
     init() {
-        serverBaseUrl = Environment.serverBaseUrl
+        serverBaseUrl = EnvironmentModel.serverBaseUrl
     }
     
     func get<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
