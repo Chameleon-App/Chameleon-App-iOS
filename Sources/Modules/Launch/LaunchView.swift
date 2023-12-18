@@ -13,6 +13,6 @@ struct LaunchView: View {
     var body: some View {
         Color(.backgroundPrimary)
             .edgesIgnoringSafeArea(.all)
-            .onAppear { viewModel.openMainScreen() }
+            .onAppear { handleViewDidAppear() }
     }
 }

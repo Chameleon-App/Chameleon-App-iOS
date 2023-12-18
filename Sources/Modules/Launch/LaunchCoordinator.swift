@@ -13,4 +13,8 @@ final class LaunchCoordinator {
 
         router?.updateRootViewController(viewController: tabBarController)
     }
+    
+    func openLoginScreen() {
+        
+    }
 }
