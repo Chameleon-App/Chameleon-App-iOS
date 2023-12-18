@@ -85,10 +85,8 @@ struct TextFieldView: View {
     private func getTextColor(isError: Bool) -> Color {
         if isError {
             return Color(.textAttention)
-        } else if isFocused || inputText.isEmpty {
-            return Color(.textPrimary)
         } else {
-            return .white
+            return Color(.textPrimary)
         }
     }
     
