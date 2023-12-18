@@ -9,4 +9,5 @@ import SwiftUI
 
 extension Font {
     static var bodySmall: Font { .system(size: 13, weight: .regular) }
+    static var bodyBig: Font { .system(size: 16, weight: .bold) }
 }

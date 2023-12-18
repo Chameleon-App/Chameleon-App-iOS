@@ -13,4 +13,12 @@ final class SettingsViewModel: ObservableObject {
     init(coordinator: SettingsCoordinator) {
         self.coordinator = coordinator
     }
+    
+    func handleChangeLanguageButtonDidTap() {
+        DeeplinkService.openAppSettings()
+    }
+    
+    func handleLogOutButtonDidTap() {
+        print(#function)
+    }
 }
