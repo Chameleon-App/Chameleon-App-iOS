@@ -15,6 +15,10 @@ final class LoginViewModel: ObservableObject {
     
     @Published var usernameInputText: String
     @Published var isUsernameValid: Bool { didSet { handleIsUsernameValidDidSet() } }
+    
+    @Published var passwordInputText: String
+    @Published var isPasswordValid: Bool { didSet { handleIsPasswordValidDidSet() } }
+    
     @Published var isLoginButtonDisabled: Bool
     
     private var coordinator: LoginCoordinator
@@ -22,7 +26,9 @@ final class LoginViewModel: ObservableObject {
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
         self.usernameInputText = .empty
+        self.passwordInputText = .empty
         self.isUsernameValid = false
+        self.isPasswordValid = false
         self.isLoginButtonDisabled = true
     }
     
@@ -34,7 +40,7 @@ final class LoginViewModel: ObservableObject {
         print(#function)
     }
     
-    func getLoginValidationRules() -> [TextFieldValidationRule] {
+    func getTextFieldsValidationRules() -> [TextFieldValidationRule] {
         let minLengthRule = TextFieldValidationRule.minLength(
             count: Constants.minimumUsernameLength,
             message: String(
@@ -46,6 +52,14 @@ final class LoginViewModel: ObservableObject {
     }
     
     private func handleIsUsernameValidDidSet() {
-        isLoginButtonDisabled = isUsernameValid == false
+        isLoginButtonDisabled = getIsLoginButtonDisabled() == false
+    }
+    
+    private func handleIsPasswordValidDidSet() {
+        isLoginButtonDisabled = getIsLoginButtonDisabled() == false
+    }
+    
+    private func getIsLoginButtonDisabled() -> Bool {
+        return isUsernameValid && isPasswordValid
     }
 }

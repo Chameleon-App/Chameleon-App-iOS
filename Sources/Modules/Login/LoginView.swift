@@ -15,6 +15,8 @@ struct LoginView: View {
         static let signupColoredPartTitleKey = "loginScreenSignupColoredPartTitle"
         static let usernameTitleKey = "usernameTitle"
         static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
+        static let passwordTitleKey = "passwordTitle"
+        static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
     }
     
     @ObservedObject var viewModel: LoginViewModel
@@ -37,16 +39,28 @@ struct LoginView: View {
                         }
                         Spacer()
                             .frame(height: 34)
-                        TextFieldView(
-                            inputText: $viewModel.usernameInputText,
-                            isInputTextValid: viewModel.isUsernameValid,
-                            headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
-                            placeholderText: String(
-                                localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
-                            ),
-                            validationRules: viewModel.getLoginValidationRules(),
-                            handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
-                        )
+                        Group {
+                            TextFieldView(
+                                inputText: $viewModel.usernameInputText,
+                                isInputTextValid: viewModel.isUsernameValid,
+                                headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                                placeholderText: String(
+                                    localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                                ),
+                                validationRules: viewModel.getTextFieldsValidationRules(),
+                                handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
+                            )
+                            TextFieldView(
+                                inputText: $viewModel.passwordInputText,
+                                isInputTextValid: viewModel.isPasswordValid,
+                                headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
+                                placeholderText: String(
+                                    localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
+                                ),
+                                validationRules: viewModel.getTextFieldsValidationRules(),
+                                handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                            )
+                        }
                         .padding(.horizontal, 12)
                     }
                     VStack {
