@@ -6,5 +6,11 @@
 //
 
 final class LoginCoordinator {
-    weak var router: NavigationRouter?
+    weak var router: (NavigationRouter & RootRouter)?
+    
+    func openMainScreen() {
+        let tabBarController = RootTabBarFactory.createRootTabBarController()
+
+        router?.updateRootViewController(viewController: tabBarController)
+    }
 }

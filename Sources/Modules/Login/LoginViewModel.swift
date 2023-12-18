@@ -21,10 +21,12 @@ final class LoginViewModel: ObservableObject {
     
     @Published var isLoginButtonDisabled: Bool
     
-    private var coordinator: LoginCoordinator
+    private let coordinator: LoginCoordinator
+    private let authenticationRepository: AuthenticationRepository
 
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
+        self.authenticationRepository = AuthenticationRepository()
         self.usernameInputText = .empty
         self.passwordInputText = .empty
         self.isUsernameValid = false
@@ -33,7 +35,7 @@ final class LoginViewModel: ObservableObject {
     }
     
     func handleLoginButtonDidTap() {
-        print(#function)
+        login()
     }
     
     func handleSignupButtonDidTap() {
@@ -61,5 +63,28 @@ final class LoginViewModel: ObservableObject {
     
     private func getIsLoginButtonDisabled() -> Bool {
         return isUsernameValid && isPasswordValid
+    }
+    
+    private func login() {
+        Task {
+            switch await authenticationRepository.login(username: usernameInputText, password: passwordInputText) {
+            case .success:
+                handleLoginSuccess()
+            case .failure(let error):
+                handleLoginError(error)
+            }
+        }
+    }
+    
+    private func handleLoginSuccess() {
+        openMainScreen()
+    }
+    
+    private func handleLoginError(_ error: ServerClientServiceError) {
+        
+    }
+    
+    private func openMainScreen() {
+        coordinator.openMainScreen()
     }
 }

@@ -9,16 +9,47 @@ import Foundation
 
 final class AuthenticationRepository {
     private enum Constants {
-        static let authenticationKeyUserDefaultsKey = "authenticationKey"
+        enum URLPath: String {
+            case loginEndpoint = "/api/auth/token/"
+        }
+        
+        static let authenticationTokenUserDefaultsKey = "authenticationToken"
     }
     
     private let userDefaults = UserDefaults.standard
     
     func getIsUserAuthenticated() -> Bool {
-        return getAuthenticationKey() != nil
+        return getAuthenticationToken() != nil
     }
     
-    func getAuthenticationKey() -> String? {
-        return userDefaults.string(forKey: Constants.authenticationKeyUserDefaultsKey)
+    func getAuthenticationToken() -> String? {
+        return userDefaults.string(forKey: Constants.authenticationTokenUserDefaultsKey)
     }
+    
+    func login(username: String, password: String) async -> ServerClientServiceResult<Void> {
+        let parameters = LoginParameters(username: username, password: password)
+        
+        let result: ServerClientServiceResult<AuthenticationTokenModel> = await ServerClientService.shared.get(
+            endpoint: Constants.URLPath.loginEndpoint.rawValue,
+            parameters: parameters
+        ) 
+        
+        switch result {
+        case .success(let token):
+            saveAuthenticationToken(token.token)
+            
+            return .success(Void())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    private func saveAuthenticationToken(_ token: String) {
+        userDefaults.setValue(token, forKey: Constants.authenticationTokenUserDefaultsKey)
+    }
+}
+
+private struct LoginParameters: Encodable {
+    let username: String
+    let password: String
 }

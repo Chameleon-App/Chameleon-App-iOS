@@ -91,7 +91,7 @@ struct LoginView: View {
                     .font(.bodySmall)
                     .onTapGesture(perform: viewModel.handleSignupButtonDidTap)
                 Spacer()
-                    .frame(height: 54)
+                    .frame(height: 24)
             }
         }
     }

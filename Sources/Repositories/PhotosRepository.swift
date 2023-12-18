@@ -5,10 +5,6 @@
 //  Created by Ilia Chub on 15.12.2023.
 //
 
-struct GetPhotosParameters: Codable {
-    let limit: Int
-}
-
 final class PhotosRepository {
     private enum Constants {
         enum URLPath: String {
@@ -24,4 +20,8 @@ final class PhotosRepository {
             parameters: parameters
         )
     }
+}
+
+private struct GetPhotosParameters: Encodable {
+    let limit: Int
 }
