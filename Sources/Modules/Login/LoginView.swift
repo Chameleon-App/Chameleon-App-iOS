@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     private enum Constants {
+        static let loginButtonTitleKey = "loginTitleKey"
         static let loginTitleKey = "loginTitleKey"
     }
     
@@ -26,6 +27,14 @@ struct LoginView: View {
                     .font(.headingPrimary)
                     .padding(.horizontal, 14)
                 Spacer()
+                ButtonView(
+                    styleType: .primary,
+                    content: String(localized: String.LocalizationValue(Constants.loginTitleKey)),
+                    action: viewModel.handleLoginButtonDidTap
+                )
+                .padding(.horizontal, 62)
+                Spacer()
+                    .frame(height: 54)
             }
             VStack {
                 Spacer()

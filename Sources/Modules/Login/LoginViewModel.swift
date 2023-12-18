@@ -13,4 +13,8 @@ final class LoginViewModel: ObservableObject {
     init(coordinator: LoginCoordinator) {
         self.coordinator = coordinator
     }
+    
+    func handleLoginButtonDidTap() {
+        print(#function)
+    }
 }

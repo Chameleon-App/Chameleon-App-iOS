@@ -69,6 +69,23 @@
         }
       }
     },
+    "loginButtonTitleKey" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Login"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вход"
+          }
+        }
+      }
+    },
     "loginTitleKey" : {
       "extractionState" : "manual",
       "localizations" : {
