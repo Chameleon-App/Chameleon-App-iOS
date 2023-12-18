@@ -69,12 +69,12 @@
         }
       }
     },
-    "loginButtonTitleKey" : {
+    "loginButtonTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Login"
           }
         },
@@ -86,7 +86,41 @@
         }
       }
     },
-    "loginTitleKey" : {
+    "loginScreenSignupColoredPartTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sign-up"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "зарегистрироваться"
+          }
+        }
+      }
+    },
+    "loginScreenSignupTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "or sign-up?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "или зарегистрироваться?"
+          }
+        }
+      }
+    },
+    "loginTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

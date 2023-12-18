@@ -9,23 +9,28 @@ import SwiftUI
 
 struct LoginView: View {
     private enum Constants {
-        static let loginButtonTitleKey = "loginTitleKey"
-        static let loginTitleKey = "loginTitleKey"
+        static let loginButtonTitleKey = "loginTitle"
+        static let loginTitleKey = "loginTitle"
+        static let signupTitleKey = "loginScreenSignupTitle"
+        static let signupColoredPartTitleKey = "loginScreenSignupColoredPartTitle"
     }
     
     @ObservedObject var viewModel: LoginViewModel
     
     var body: some View {
         ZStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 Color(.backgroundAccent)
                     .ignoresSafeArea()
                     .frame(height: 180)
                 Spacer()
                     .frame(height: 8)
-                Text(String(localized: String.LocalizationValue(Constants.loginTitleKey)))
-                    .font(.headingPrimary)
-                    .padding(.horizontal, 14)
+                HStack {
+                    Text(String(localized: String.LocalizationValue(Constants.loginTitleKey)))
+                        .font(.headingPrimary)
+                        .padding(.horizontal, 14)
+                    Spacer()
+                }
                 Spacer()
                 ButtonView(
                     styleType: .primary,
@@ -33,6 +38,11 @@ struct LoginView: View {
                     action: viewModel.handleLoginButtonDidTap
                 )
                 .padding(.horizontal, 62)
+                Spacer()
+                    .frame(height: 12)
+                Text(getSignupTitle())
+                    .font(.bodySmall)
+                    .onTapGesture(perform: viewModel.handleSignupButtonDidTap)
                 Spacer()
                     .frame(height: 54)
             }
@@ -47,5 +57,19 @@ struct LoginView: View {
                 Spacer()
             }
         }
+    }
+    
+    private func getSignupTitle() -> AttributedString {
+        let string = String(localized: String.LocalizationValue(Constants.signupTitleKey))
+        var attributedString = AttributedString(string)
+        
+        attributedString.foregroundColor = Color(.textUnaccent)
+        
+        let coloredPart = String(localized: String.LocalizationValue(Constants.signupColoredPartTitleKey))
+        if let range = attributedString.range(of: coloredPart) {
+            attributedString[range].foregroundColor = Color(.textLink)
+        }
+        
+        return attributedString
     }
 }

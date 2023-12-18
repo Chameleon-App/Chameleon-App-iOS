@@ -17,4 +17,8 @@ final class LoginViewModel: ObservableObject {
     func handleLoginButtonDidTap() {
         print(#function)
     }
+    
+    func handleSignupButtonDidTap() {
+        print(#function)
+    }
 }
