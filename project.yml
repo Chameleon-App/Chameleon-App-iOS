@@ -26,6 +26,7 @@ targets:
     info:
       path: Sources/Configurations/Info.plist
       properties:
+        UIUserInterfaceStyle: Light
         SERVER_BASE_URL: $(SERVER_BASE_URL)
         UIRequiresFullScreen: true
         UIStatusBarStyle: UIStatusBarStyleLightContent
