@@ -50,6 +50,8 @@ struct LoginView: View {
                                 validationRules: viewModel.getTextFieldsValidationRules(),
                                 handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
                             )
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                             TextFieldView(
                                 inputText: $viewModel.passwordInputText,
                                 isInputTextValid: viewModel.isPasswordValid,
@@ -60,6 +62,8 @@ struct LoginView: View {
                                 validationRules: viewModel.getTextFieldsValidationRules(),
                                 handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
                             )
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                         }
                         .padding(.horizontal, 12)
                     }

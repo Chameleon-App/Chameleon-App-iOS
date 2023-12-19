@@ -85,6 +85,6 @@ final class LoginViewModel: ObservableObject {
     }
     
     private func openMainScreen() {
-        coordinator.openMainScreen()
+        Task { @MainActor in coordinator.openMainScreen() }
     }
 }

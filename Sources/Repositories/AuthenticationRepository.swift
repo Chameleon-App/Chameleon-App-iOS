@@ -29,7 +29,7 @@ final class AuthenticationRepository {
     func login(username: String, password: String) async -> ServerClientServiceResult<Void> {
         let parameters = LoginParameters(username: username, password: password)
         
-        let result: ServerClientServiceResult<AuthenticationTokenModel> = await ServerClientService.shared.get(
+        let result: ServerClientServiceResult<AuthenticationTokenModel> = await ServerClientService.shared.post(
             endpoint: Constants.URLPath.loginEndpoint.rawValue,
             parameters: parameters
         ) 

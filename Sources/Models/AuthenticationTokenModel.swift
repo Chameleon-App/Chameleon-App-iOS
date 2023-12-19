@@ -6,7 +6,5 @@
 //
 
 struct AuthenticationTokenModel: Decodable {
-    let username: String
-    let password: String
     let token: String
 }
