@@ -15,11 +15,11 @@ final class LoginViewModel: ObservableObject {
     
     @Published var usernameInputText: String
     @Published var isUsernameValid: Bool { didSet { handleIsUsernameValidDidSet() } }
-    
     @Published var passwordInputText: String
     @Published var isPasswordValid: Bool { didSet { handleIsPasswordValidDidSet() } }
-    
     @Published var isLoginButtonDisabled: Bool
+    @Published var isErrorAlertPresented: Bool
+    
     
     private let coordinator: LoginCoordinator
     private let authenticationRepository: AuthenticationRepository
@@ -32,6 +32,7 @@ final class LoginViewModel: ObservableObject {
         self.isUsernameValid = false
         self.isPasswordValid = false
         self.isLoginButtonDisabled = true
+        self.isErrorAlertPresented = false
     }
     
     func handleLoginButtonDidTap() {
@@ -51,6 +52,10 @@ final class LoginViewModel: ObservableObject {
         )
         
         return [minLengthRule]
+    }
+    
+    func handleLoginErrorAlertButtonDidTap() {
+        isErrorAlertPresented = false
     }
     
     private func handleIsUsernameValidDidSet() {
@@ -81,7 +86,7 @@ final class LoginViewModel: ObservableObject {
     }
     
     private func handleLoginError(_ error: ServerClientServiceError) {
-        
+        Task { @MainActor in isErrorAlertPresented = true }
     }
     
     private func openMainScreen() {

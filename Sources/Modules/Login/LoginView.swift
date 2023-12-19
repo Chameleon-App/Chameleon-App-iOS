@@ -17,6 +17,9 @@ struct LoginView: View {
         static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
         static let passwordTitleKey = "passwordTitle"
         static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
+        static let loginErrorTitleKey = "loginErrorTitle"
+        static let loginErrorButtonTitleKey = "loginErrorButtonTitle"
+        static let loginErrorDescriptionKey = "loginErrorDescription"
     }
     
     @ObservedObject var viewModel: LoginViewModel
@@ -77,6 +80,22 @@ struct LoginView: View {
                         .padding(.horizontal, 14)
                         Spacer()
                     }
+                    .alert(
+                        String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
+                        isPresented: $viewModel.isErrorAlertPresented,
+                        actions: {
+                            Button(
+                                String(localized: String.LocalizationValue(Constants.loginErrorButtonTitleKey)),
+                                role: .none
+                            ) {
+                                viewModel.handleLoginErrorAlertButtonDidTap()
+                            }
+                        },
+                        message: {
+                            Text(String(localized: String.LocalizationValue(Constants.loginErrorDescriptionKey)))
+                                .foregroundColor(Color(.textPrimary))
+                        }
+                    )
                 }
             }
             .ignoresSafeArea()
