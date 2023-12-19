@@ -44,6 +44,10 @@ final class AuthenticationRepository {
         }
     }
     
+    func logout() {
+        userDefaults.removeObject(forKey: Constants.authenticationTokenUserDefaultsKey)
+    }
+    
     private func saveAuthenticationToken(_ token: String) {
         userDefaults.setValue(token, forKey: Constants.authenticationTokenUserDefaultsKey)
     }

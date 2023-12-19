@@ -8,17 +8,28 @@
 import SwiftUI
 
 final class SettingsViewModel: ObservableObject {
-    private var coordinator: SettingsCoordinator
+    private let coordinator: SettingsCoordinator
+    private let authenticationRepository: AuthenticationRepository
 
     init(coordinator: SettingsCoordinator) {
         self.coordinator = coordinator
+        self.authenticationRepository = AuthenticationRepository()
     }
     
     func handleChangeLanguageButtonDidTap() {
         DeeplinkService.openAppSettings()
     }
     
-    func handleLogOutButtonDidTap() {
-        print(#function)
+    func handleLogoutButtonDidTap() {
+        logout()
+    }
+    
+    private func logout() {
+        authenticationRepository.logout()
+        openLoginScreen()
+    }
+    
+    private func openLoginScreen() {
+        coordinator.openLoginScreen()
     }
 }

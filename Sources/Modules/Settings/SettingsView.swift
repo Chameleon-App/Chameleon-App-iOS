@@ -25,7 +25,7 @@ struct SettingsView: View {
             ButtonView(
                 styleType: .attention,
                 content: String(localized: String.LocalizationValue(Constants.logOutButtonTitleKey)),
-                action: viewModel.handleLogOutButtonDidTap
+                action: viewModel.handleLogoutButtonDidTap
             )
         }
         .padding(.horizontal, 64)
