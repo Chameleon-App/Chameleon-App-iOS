@@ -117,6 +117,7 @@ struct LoginView: View {
                     .frame(height: 24)
             }
         }
+        .resignResponderOnTap()
     }
     
     private func getSignupTitle() -> AttributedString {
