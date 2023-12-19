@@ -9,12 +9,30 @@ import SwiftUI
 
 final class LaunchViewModel: ObservableObject {
     private var coordinator: LaunchCoordinator
+    private let authenticationRepository: AuthenticationRepository
     
     init(coordinator: LaunchCoordinator) {
         self.coordinator = coordinator
+        self.authenticationRepository = AuthenticationRepository()
     }
     
-    func openMainScreen() {
+    func handleViewDidAppear() {
+        if getIsUserAuthenticated() {
+            openMainScreen()
+        } else {
+            openLoginScreen()
+        }
+    }
+    
+    private func openMainScreen() {
         coordinator.openMainScreen()
+    }
+    
+    private func openLoginScreen() {
+        coordinator.openLoginScreen()
+    }
+    
+    private func getIsUserAuthenticated() -> Bool {
+        return authenticationRepository.getIsUserAuthenticated()
     }
 }

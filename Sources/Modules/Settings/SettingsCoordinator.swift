@@ -6,5 +6,11 @@
 //
 
 final class SettingsCoordinator {
-    weak var router: NavigationRouter?
+    weak var router: (NavigationRouter & RootRouter)?
+    
+    func openLoginScreen() {
+        let viewController = LoginFactory.createLoginViewController()
+        
+        router?.updateRootViewController(viewController: viewController)
+    }
 }
