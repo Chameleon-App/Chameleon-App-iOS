@@ -14,6 +14,7 @@ final class AuthenticationRepository {
         }
         
         static let authenticationTokenUserDefaultsKey = "authenticationToken"
+        static let authenticationTokenPrefix = "Token "
     }
     
     private let userDefaults = UserDefaults.standard
@@ -23,7 +24,11 @@ final class AuthenticationRepository {
     }
     
     func getAuthenticationToken() -> String? {
-        return userDefaults.string(forKey: Constants.authenticationTokenUserDefaultsKey)
+        guard let rawToken = userDefaults.string(forKey: Constants.authenticationTokenUserDefaultsKey) else {
+            return nil
+        }
+        
+        return Constants.authenticationTokenPrefix + rawToken
     }
     
     func login(username: String, password: String) async -> ServerClientServiceResult<Void> {

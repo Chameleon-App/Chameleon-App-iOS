@@ -16,11 +16,15 @@ class CalendarViewModel: ObservableObject {
     @Published private(set) var viewState: CalendarViewState
     
     private let pantonesRepository: PantonesRepository
+    private let photosRepository: PhotosRepository
+    private let authenticationRepository: AuthenticationRepository
     
     private var coordinator: CalendarCoordinator
 
     init(coordinator: CalendarCoordinator) {
         self.pantonesRepository = PantonesRepository()
+        self.photosRepository = PhotosRepository()
+        self.authenticationRepository = AuthenticationRepository()
         self.coordinator = coordinator
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
@@ -111,15 +115,25 @@ class CalendarViewModel: ObservableObject {
         }
     }
     
-    // TODO: Add error handling when a photo loading is ready
     private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem) async {
-        do {
-            guard let imageData = try await selectedPhoto.loadTransferable(type: Data.self) else {
-                return
-            }
-            
-            print(imageData.base64EncodedString())
-        } catch {
+        guard
+            let imageData = try? await selectedPhoto.loadTransferable(type: Data.self),
+            let image = UIImage(data: imageData),
+            let jpegData = image.jpegData(compressionQuality: .one),
+            let authenticationToken = authenticationRepository.getAuthenticationToken()
+        else {
+            return print("Error")
+        }
+        
+        let photoUploadingResult = await photosRepository.uploadPhoto(
+            jpegData: jpegData,
+            authenticationToken: authenticationToken
+        )
+        
+        switch photoUploadingResult {
+        case .success:
+            print("Success")
+        case .failure(let error):
             print(error)
         }
     }

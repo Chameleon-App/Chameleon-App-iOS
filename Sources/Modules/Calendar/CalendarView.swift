@@ -151,8 +151,8 @@ private struct CalendarAddPhotoView: View {
         }
         .photosPickerDisabledCapabilities(.collectionNavigation)
         .onChange(of: selectedPhotoItem) {
-            selectedPhotoItem = nil
             addPhotoHandleClosure(selectedPhotoItem)
+            selectedPhotoItem = nil
         }
     }
 }

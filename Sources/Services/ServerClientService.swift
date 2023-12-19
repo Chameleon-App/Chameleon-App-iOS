@@ -52,6 +52,34 @@ final class ServerClientService {
         )
     }
     
+    func upload<ReturnValue: Decodable>(
+        endpoint: String,
+        jpegData: Data,
+        headers: ServerClientServiceRequestHeaders? = nil
+    ) async -> ServerClientServiceResult<ReturnValue> {
+        let url = serverBaseUrl + endpoint
+        
+        return await withCheckedContinuation { continuation in
+            AF.upload(
+                multipartFormData: { multipartFormData in
+                    multipartFormData.append(jpegData, withName: "photo", fileName: "file.jpeg", mimeType: "image/jpeg")
+                },
+                to: url,
+                headers: headers
+            )
+            .responseDecodable(of: ReturnValue.self) { response in
+                switch response.result {
+                case .success(let returnValue):
+                    continuation.resume(returning: .success(returnValue))
+                case .failure(let error):
+                    print(String(describing: error))
+                    let errorCode = ServerClientServiceError.Code(rawValue: error.responseCode ?? 0) ?? .unknown
+                    continuation.resume(returning: .failure(ServerClientServiceError(errorCode)))
+                }
+            }
+        }
+    }
+    
     private func performRequest<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
         method: HTTPMethod,
