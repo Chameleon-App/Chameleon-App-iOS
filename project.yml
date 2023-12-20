@@ -64,6 +64,7 @@ targets:
       - package: SnapKit
       - package: Alamofire
       - package: FormView
+      - package: SwiftyCrop
 packages:
   Utils:
     url: https://github.com/MobileUpLLC/Utils
@@ -77,3 +78,6 @@ packages:
   FormView:
     url: https://github.com/MobileUpLLC/FormView
     exactVersion: 1.1.2
+  SwiftyCrop:
+    url: https://github.com/benedom/SwiftyCrop
+    branch: master

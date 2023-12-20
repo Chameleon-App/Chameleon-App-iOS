@@ -72,8 +72,11 @@ class CalendarViewModel: ObservableObject {
         
         let contentViewItem = CalendarContentViewItem(
             pantonesOfDay: pantonesOfDayViewItem,
-            addPhotoHandleClosure: { [weak self] in
-                self?.handleAddPhotoButtonDidTap(selectedPhoto: $0)
+            selectPhotoHandleClosure: { [weak self] in
+                return await self?.getImage(from: $0)
+            },
+            croppPhotoHandleClosure: { [weak self] croppedImage in
+                self?.handlePhotoDidCrop(image: croppedImage)
             }
         )
         let contentViewState = CalendarViewState.content(contentViewItem)
@@ -114,20 +117,23 @@ class CalendarViewModel: ObservableObject {
         )
     }
     
-    private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem?) {
-        guard let selectedPhoto else {
-            return
+    private func getImage(from selectedPhoto: PhotosPickerItem?) async -> UIImage? {
+        guard
+            let selectedPhoto,
+            let imageData = try? await selectedPhoto.loadTransferable(type: Data.self),
+            let image = UIImage(data: imageData)
+        else {
+            handlePhotoLoadingError()
+            
+            return nil
         }
         
-        Task {
-            await handleAddPhotoButtonDidTap(selectedPhoto: selectedPhoto)
-        }
+        return image
     }
     
-    private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem) async {
+    private func handlePhotoDidCrop(image: UIImage?) {
         guard
-            let imageData = try? await selectedPhoto.loadTransferable(type: Data.self),
-            let image = UIImage(data: imageData),
+            let image,
             let jpegData = image.jpegData(compressionQuality: .one),
             let authenticationToken = authenticationRepository.getAuthenticationToken()
         else {
@@ -136,18 +142,20 @@ class CalendarViewModel: ObservableObject {
         
         Task { @MainActor in isActivityIndicatorPresented = true }
         
-        let photoUploadingResult = await photosRepository.uploadPhoto(
-            jpegData: jpegData,
-            authenticationToken: authenticationToken
-        )
-        
-        Task { @MainActor in isActivityIndicatorPresented = false }
-        
-        switch photoUploadingResult {
-        case .success:
-            print("Success")
-        case .failure:
-            handlePhotoLoadingError()
+        Task {
+            let photoUploadingResult = await photosRepository.uploadPhoto(
+                jpegData: jpegData,
+                authenticationToken: authenticationToken
+            )
+            
+            Task { @MainActor in isActivityIndicatorPresented = false }
+            
+            switch photoUploadingResult {
+            case .success:
+                print("Success")
+            case .failure:
+                handlePhotoLoadingError()
+            }
         }
     }
     
