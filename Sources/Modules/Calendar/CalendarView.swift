@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftyCrop
 
 enum CalendarViewState: Equatable {
     case loading(CalendarLoadingViewItem)
@@ -33,7 +34,8 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
         return lhs.pantonesOfDay == rhs.pantonesOfDay
@@ -92,7 +94,11 @@ private struct CalendarLoaingView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            CalendarHeaderView(pantonesOfDay: viewItem.pantonesOfDay, addPhotoHandleClosure: nil)
+            CalendarHeaderView(
+                pantonesOfDay: viewItem.pantonesOfDay,
+                selectPhotoHandleClosure: nil,
+                cropPhotoHandleClosure: nil
+            )
             Spacer()
             ProgressView()
             Spacer()
@@ -109,7 +115,8 @@ private struct CalendarContentView: View {
             VStack(spacing: 0) {
                 CalendarHeaderView(
                     pantonesOfDay: viewItem.pantonesOfDay,
-                    addPhotoHandleClosure: viewItem.addPhotoHandleClosure
+                    selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
+                    cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
                 )
                 Spacer()
             }
@@ -127,7 +134,8 @@ private struct CalendarContentView: View {
 
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>?
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -135,8 +143,11 @@ private struct CalendarHeaderView: View {
                 .frame(height: 50)
             HStack(alignment: .top) {
                 Group {
-                    if let addPhotoHandleClosure {
-                        CalendarAddPhotoView(addPhotoHandleClosure: addPhotoHandleClosure)
+                    if let selectPhotoHandleClosure, let cropPhotoHandleClosure {
+                        CalendarAddPhotoView(
+                            selectPhotoHandleClosure: selectPhotoHandleClosure,
+                            cropPhotoHandleClosure: cropPhotoHandleClosure
+                        )
                     } else {
                         Spacer()
                     }
@@ -164,9 +175,12 @@ private struct CalendarAddPhotoView: View {
         static let addPhotosTitleKey = "addPhotoTitle"
     }
     
-    let addPhotoHandleClosure: Closure.Generic<PhotosPickerItem?>
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>
     
     @State private var selectedPhotoItem: PhotosPickerItem?
+    @State private var selectedImage: UIImage?
+    @State private var isCropViewPresented = false
     
     var body: some View {
         PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
@@ -186,8 +200,27 @@ private struct CalendarAddPhotoView: View {
         }
         .photosPickerDisabledCapabilities(.collectionNavigation)
         .onChange(of: selectedPhotoItem) {
-            addPhotoHandleClosure(selectedPhotoItem)
-            selectedPhotoItem = nil
+            guard let selectedPhotoItem else {
+                return
+            }
+            
+            Task {
+                self.selectedImage = await selectPhotoHandleClosure(selectedPhotoItem)
+                
+                if selectedImage != nil {
+                    self.selectedPhotoItem = nil
+                    self.isCropViewPresented = true
+                }
+            }
+        }
+        .fullScreenCover(isPresented: $isCropViewPresented) {
+            if let selectedImage {
+                SwiftyCropView(imageToCrop: selectedImage, maskShape: .square) {
+                    self.isCropViewPresented = false
+                    self.cropPhotoHandleClosure($0)
+                    self.selectedImage = nil
+                }
+            }
         }
     }
 }
