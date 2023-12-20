@@ -39,7 +39,7 @@ struct CalendarContentViewItem: Equatable {
     let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
-        return lhs.pantonesOfDay == rhs.pantonesOfDay
+        return lhs.pantonesOfDay == rhs.pantonesOfDay && lhs.cells == rhs.cells
     }
 }
 

@@ -206,7 +206,7 @@ class CalendarViewModel: ObservableObject {
             
             switch photoUploadingResult {
             case .success:
-                print("Success")
+                await configurePantonesOfDayAndPhotosBydays()
             case .failure:
                 handlePhotoLoadingError()
             }
