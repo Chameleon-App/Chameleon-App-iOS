@@ -160,16 +160,19 @@ private struct CalendarContentCellView: View {
                 Text(viewItem.dateString)
                     .foregroundStyle(Color(.textPrimary))
                     .font(.bodyBig)
+                Spacer()
                 if let triplePantoneFeed = viewItem.triplePantoneFeed {
                     TriplePantoneFeedView(viewItem: triplePantoneFeed, pantoneWidth: 25)
                 }
             }
+            .padding(.horizontal, 8)
             LazyVGrid(columns: columns, spacing: 1) {
                 ForEach(viewItem.photos) {
                     EvaluatedImageFeedView(viewItem: $0)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
+            .padding(.horizontal, 1)
         }
     }
 }

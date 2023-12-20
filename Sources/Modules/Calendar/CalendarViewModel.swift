@@ -72,7 +72,8 @@ class CalendarViewModel: ObservableObject {
     
     private func handleSeccessResult(pantonesOfDay: PantonesOfDayModel, photosByDays: [PhotosOfDayModel]) {
         guard let pantonesOfDayViewItem = mapPantonesToTriplePantoneFeedViewItem(
-            pantones: pantonesOfDay.pantones
+            pantones: pantonesOfDay.pantones,
+            isNeedDoAddNames: true
         ) else {
             return handleError(ServerClientServiceError(.unknown))
         }
@@ -107,8 +108,13 @@ class CalendarViewModel: ObservableObject {
             
             return CalendarContentCellViewItem(
                 dateString: dateString,
-                triplePantoneFeed: mapPantonesToTriplePantoneFeedViewItem(pantones: $0.pantones),
-                photos: $0.photos.map { mapPhotoToEvaluationFeedImage($0) }
+                triplePantoneFeed: mapPantonesToTriplePantoneFeedViewItem(
+                    pantones: $0.pantones,
+                    isNeedDoAddNames: false
+                ),
+                photos: $0.photos.map {
+                    mapPhotoToEvaluationFeedImage($0)
+                }
             )
         }
     }
@@ -126,18 +132,28 @@ class CalendarViewModel: ObservableObject {
     }
     
     private func mapPantonesToTriplePantoneFeedViewItem(
-        pantones: [PantoneModel]
+        pantones: [PantoneModel],
+        isNeedDoAddNames: Bool
     ) -> TriplePantoneFeedViewItem? {
         if pantones.count != TriplePantoneFeedView.Constants.countOfPantones {
             return nil
         }
         
         let leftPantone = pantones[0]
-        let leftPantoneViewItem = PantoneFeedViewItem(hex: leftPantone.hex, name: leftPantone.name)
+        let leftPantoneViewItem = PantoneFeedViewItem(
+            hex: leftPantone.hex,
+            name: isNeedDoAddNames ? leftPantone.name : nil
+        )
         let middlePantone = pantones[1]
-        let middlePantoneViewItem = PantoneFeedViewItem(hex: middlePantone.hex, name: middlePantone.name)
+        let middlePantoneViewItem = PantoneFeedViewItem(
+            hex: middlePantone.hex,
+            name: isNeedDoAddNames ? middlePantone.name : nil
+        )
         let rightPantone = pantones[2]
-        let rightPantoneViewItem = PantoneFeedViewItem(hex: rightPantone.hex, name: rightPantone.name)
+        let rightPantoneViewItem = PantoneFeedViewItem(
+            hex: rightPantone.hex,
+            name: isNeedDoAddNames ? rightPantone.name : nil
+        )
         
         return TriplePantoneFeedViewItem(
             left: leftPantoneViewItem,
