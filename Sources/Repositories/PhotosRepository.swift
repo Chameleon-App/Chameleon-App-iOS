@@ -13,6 +13,8 @@ final class PhotosRepository {
             case getTopPhotosEndpoint = "/api/photos/top/"
             case uploadPhotoEndpoint = "/api/photos/rate/"
         }
+        
+        static let authorizationHeaderKey = "Authorization"
     }
     
     func getTopPhotos(limit: Int) async -> ServerClientServiceResult<[RatedPhotoModel]> {
@@ -26,7 +28,7 @@ final class PhotosRepository {
     
     func uploadPhoto(jpegData: Data, authenticationToken: String) async -> ServerClientServiceResult<Void> {
         let headers: ServerClientServiceRequestHeaders = [
-            "Authorization": authenticationToken
+            Constants.authorizationHeaderKey: authenticationToken
         ]
         
         let result: ServerClientServiceResult<UploadPhotoSuccessResultModel> = await ServerClientService.shared.upload(
