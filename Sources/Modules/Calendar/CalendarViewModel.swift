@@ -72,6 +72,7 @@ class CalendarViewModel: ObservableObject {
         
         let contentViewItem = CalendarContentViewItem(
             pantonesOfDay: pantonesOfDayViewItem,
+            cells: <#[CalendarContentCellViewItem]#>,
             selectPhotoHandleClosure: { [weak self] in
                 return await self?.getImage(from: $0)
             },

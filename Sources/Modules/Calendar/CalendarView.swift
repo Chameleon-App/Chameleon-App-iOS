@@ -34,12 +34,21 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let cells: [CalendarContentCellViewItem]
     let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
     let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
         return lhs.pantonesOfDay == rhs.pantonesOfDay
     }
+}
+
+struct CalendarContentCellViewItem: Identifiable, Equatable {
+    var id: String { dateString }
+    
+    let dateString: String
+    let triplePantoneFeed: TriplePantoneFeedViewItem?
+    let photos: [EvaluationFeedImageViewItem]
 }
 
 struct CalendarErrorViewItem {
@@ -112,13 +121,18 @@ private struct CalendarContentView: View {
     
     var body: some View {
         ZStack {
-            VStack(spacing: 0) {
-                CalendarHeaderView(
-                    pantonesOfDay: viewItem.pantonesOfDay,
-                    selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
-                    cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
-                )
-                Spacer()
+            ScrollView {
+                VStack(spacing: 0) {
+                    CalendarHeaderView(
+                        pantonesOfDay: viewItem.pantonesOfDay,
+                        selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
+                        cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
+                    )
+                    ForEach(viewItem.cells) {
+                        CalendarContentCellView(viewItem: $0)
+                            .padding(.top, 10)
+                    }
+                }
             }
             .opacity(isActivityIndicatorPresented ? 0.25 : 1)
             if isActivityIndicatorPresented {
@@ -129,6 +143,34 @@ private struct CalendarContentView: View {
             }
         }
         .animation(.default, value: isActivityIndicatorPresented)
+    }
+}
+
+private struct CalendarContentCellView: View {
+    let viewItem: CalendarContentCellViewItem
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible())
+    ]
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(viewItem.dateString)
+                    .foregroundStyle(Color(.textPrimary))
+                    .font(.bodyBig)
+                if let triplePantoneFeed = viewItem.triplePantoneFeed {
+                    TriplePantoneFeedView(viewItem: triplePantoneFeed, pantoneWidth: 25)
+                }
+            }
+            LazyVGrid(columns: columns, spacing: 1) {
+                ForEach(viewItem.photos) {
+                    EvaluatedImageFeedView(viewItem: $0)
+                        .aspectRatio(1, contentMode: .fit)
+                }
+            }
+        }
     }
 }
 

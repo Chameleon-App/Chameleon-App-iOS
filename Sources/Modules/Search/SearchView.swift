@@ -42,14 +42,13 @@ private struct SearchLoadingView: View {
 
 private struct SearchContentView: View {
     let viewItem: SearchContentViewItem
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible())
+    ]
 
     var body: some View {
-        let columns: [GridItem] = [
-            GridItem(.flexible(), spacing: 1),
-            GridItem(.flexible(), spacing: 1),
-            GridItem(.flexible())
-        ]
-
         ScrollView {
             LazyVGrid(columns: columns, spacing: 1) {
                 ForEach(viewItem.photos) {
