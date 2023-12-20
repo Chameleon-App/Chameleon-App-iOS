@@ -143,6 +143,7 @@ private struct CalendarContentView: View {
             }
         }
         .animation(.default, value: isActivityIndicatorPresented)
+        .animation(.default, value: viewItem)
     }
 }
 
