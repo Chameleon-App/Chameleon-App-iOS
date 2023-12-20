@@ -75,7 +75,7 @@ class CalendarViewModel: ObservableObject {
             selectPhotoHandleClosure: { [weak self] in
                 return await self?.getImage(from: $0)
             },
-            croppPhotoHandleClosure: { [weak self] croppedImage in
+            cropPhotoHandleClosure: { [weak self] croppedImage in
                 self?.handlePhotoDidCrop(image: croppedImage)
             }
         )

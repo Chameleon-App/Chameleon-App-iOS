@@ -35,7 +35,7 @@ struct CalendarLoadingViewItem: Equatable {
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
     let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
-    let croppPhotoHandleClosure: Closure.Generic<UIImage?>?
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
         return lhs.pantonesOfDay == rhs.pantonesOfDay
@@ -97,7 +97,7 @@ private struct CalendarLoaingView: View {
             CalendarHeaderView(
                 pantonesOfDay: viewItem.pantonesOfDay,
                 selectPhotoHandleClosure: nil,
-                croppPhotoHandleClosure: nil
+                cropPhotoHandleClosure: nil
             )
             Spacer()
             ProgressView()
@@ -116,7 +116,7 @@ private struct CalendarContentView: View {
                 CalendarHeaderView(
                     pantonesOfDay: viewItem.pantonesOfDay,
                     selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
-                    croppPhotoHandleClosure: viewItem.croppPhotoHandleClosure
+                    cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
                 )
                 Spacer()
             }
@@ -135,7 +135,7 @@ private struct CalendarContentView: View {
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
     let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
-    let croppPhotoHandleClosure: Closure.Generic<UIImage?>?
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -143,10 +143,10 @@ private struct CalendarHeaderView: View {
                 .frame(height: 50)
             HStack(alignment: .top) {
                 Group {
-                    if let selectPhotoHandleClosure, let croppPhotoHandleClosure {
+                    if let selectPhotoHandleClosure, let cropPhotoHandleClosure {
                         CalendarAddPhotoView(
                             selectPhotoHandleClosure: selectPhotoHandleClosure,
-                            croppPhotoHandleClosure: croppPhotoHandleClosure
+                            cropPhotoHandleClosure: cropPhotoHandleClosure
                         )
                     } else {
                         Spacer()
@@ -176,7 +176,7 @@ private struct CalendarAddPhotoView: View {
     }
     
     let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)
-    let croppPhotoHandleClosure: Closure.Generic<UIImage?>
+    let cropPhotoHandleClosure: Closure.Generic<UIImage?>
     
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var selectedImage: UIImage?
@@ -217,7 +217,7 @@ private struct CalendarAddPhotoView: View {
             if let selectedImage {
                 SwiftyCropView(imageToCrop: selectedImage, maskShape: .square) {
                     self.isCropViewPresented = false
-                    self.croppPhotoHandleClosure($0)
+                    self.cropPhotoHandleClosure($0)
                     self.selectedImage = nil
                 }
             }
