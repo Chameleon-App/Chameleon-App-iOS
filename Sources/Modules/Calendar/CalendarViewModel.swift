@@ -167,7 +167,7 @@ class CalendarViewModel: ObservableObject {
             id: photo.id,
             url: photo.url,
             points: photo.points,
-            date: photo.date,
+            date: nil,
             authorImageUrl: nil
         )
     }
