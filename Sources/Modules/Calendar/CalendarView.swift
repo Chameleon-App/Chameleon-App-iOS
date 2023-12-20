@@ -45,6 +45,12 @@ struct CalendarErrorViewItem {
 }
 
 struct CalendarView: View {
+    private enum Constants {
+        static let photoLoadingErrorTitleKey = "loginErrorTitle"
+        static let photoLoadingButtonTitleKey = "loginErrorButtonTitle"
+        static let photoLoadingDescriptionKey = "loginErrorDescription"
+    }
+    
     @ObservedObject var viewModel: CalendarViewModel
     
     var body: some View {
@@ -58,6 +64,21 @@ struct CalendarView: View {
                 Text(errorViewItem.message)
             }
         }
+        .alert(
+            String(localized: String.LocalizationValue(Constants.photoLoadingErrorTitleKey)),
+            isPresented: $viewModel.isPhotoLoadingErrorAlertPresented,
+            actions: {
+                Button(
+                    String(localized: String.LocalizationValue(Constants.photoLoadingButtonTitleKey)),
+                    role: .none,
+                    action: viewModel.handlePhotoLoadingErrorAlertButtonDidTap
+                )
+            },
+            message: {
+                Text(String(localized: String.LocalizationValue(Constants.photoLoadingDescriptionKey)))
+                    .foregroundColor(Color(.textPrimary))
+            }
+        )
         .animation(.default, value: viewModel.viewState)
         .onAppear { viewModel.handleViewDidAppear() }
     }

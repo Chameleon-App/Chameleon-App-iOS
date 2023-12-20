@@ -20,7 +20,6 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoginButtonDisabled: Bool
     @Published var isErrorAlertPresented: Bool
     
-    
     private let coordinator: LoginCoordinator
     private let authenticationRepository: AuthenticationRepository
 

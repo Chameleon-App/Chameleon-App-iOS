@@ -14,6 +14,7 @@ class CalendarViewModel: ObservableObject {
     }
     
     @Published private(set) var viewState: CalendarViewState
+    @Published var isPhotoLoadingErrorAlertPresented: Bool
     
     private let pantonesRepository: PantonesRepository
     private let photosRepository: PhotosRepository
@@ -26,6 +27,7 @@ class CalendarViewModel: ObservableObject {
         self.photosRepository = PhotosRepository()
         self.authenticationRepository = AuthenticationRepository()
         self.coordinator = coordinator
+        self.isPhotoLoadingErrorAlertPresented = false
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
         let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
@@ -43,6 +45,10 @@ class CalendarViewModel: ObservableObject {
     
     func handleViewDidAppear() {
         Task { await configurePantonesOfDay() }
+    }
+    
+    func handlePhotoLoadingErrorAlertButtonDidTap() {
+        isPhotoLoadingErrorAlertPresented = false
     }
     
     private func configurePantonesOfDay() async {
@@ -122,7 +128,7 @@ class CalendarViewModel: ObservableObject {
             let jpegData = image.jpegData(compressionQuality: .one),
             let authenticationToken = authenticationRepository.getAuthenticationToken()
         else {
-            return print("Error")
+            return handlePhotoLoadingError()
         }
         
         let photoUploadingResult = await photosRepository.uploadPhoto(
@@ -133,8 +139,12 @@ class CalendarViewModel: ObservableObject {
         switch photoUploadingResult {
         case .success:
             print("Success")
-        case .failure(let error):
-            print(error)
+        case .failure:
+            handlePhotoLoadingError()
         }
+    }
+    
+    private func handlePhotoLoadingError() {
+        Task { @MainActor in isPhotoLoadingErrorAlertPresented = true }
     }
 }
