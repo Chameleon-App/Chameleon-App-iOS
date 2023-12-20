@@ -34,7 +34,7 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let selectPhotoHandleClosure: ((PhotosPickerItem?) async -> UIImage?)?
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
     let croppPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
@@ -134,7 +134,7 @@ private struct CalendarContentView: View {
 
 private struct CalendarHeaderView: View {
     let pantonesOfDay: TriplePantoneFeedViewItem
-    let selectPhotoHandleClosure: ((PhotosPickerItem?) async -> UIImage?)?
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
     let croppPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     var body: some View {
@@ -175,7 +175,7 @@ private struct CalendarAddPhotoView: View {
         static let addPhotosTitleKey = "addPhotoTitle"
     }
     
-    let selectPhotoHandleClosure: ((PhotosPickerItem?) async -> UIImage?)
+    let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)
     let croppPhotoHandleClosure: Closure.Generic<UIImage?>
     
     @State private var selectedPhotoItem: PhotosPickerItem?
@@ -205,11 +205,11 @@ private struct CalendarAddPhotoView: View {
             }
             
             Task {
-                selectedImage = await selectPhotoHandleClosure(selectedPhotoItem)
+                self.selectedImage = await selectPhotoHandleClosure(selectedPhotoItem)
                 
                 if selectedImage != nil {
                     self.selectedPhotoItem = nil
-                    isCropViewPresented = true
+                    self.isCropViewPresented = true
                 }
             }
         }

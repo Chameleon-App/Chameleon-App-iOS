@@ -117,9 +117,8 @@ class CalendarViewModel: ObservableObject {
         )
     }
     
-    private func getImage(from selectedPhoto: PhotosPickerItem?) async -> UIImage? {
+    private func getImage(from selectedPhoto: PhotosPickerItem) async -> UIImage? {
         guard
-            let selectedPhoto,
             let imageData = try? await selectedPhoto.loadTransferable(type: Data.self),
             let image = UIImage(data: imageData)
         else {
