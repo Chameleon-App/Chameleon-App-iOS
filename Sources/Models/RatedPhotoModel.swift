@@ -11,20 +11,20 @@ struct RatedPhotoModel: Decodable, Identifiable {
     let id: Int
     let url: URL?
     let date: Date
-    let rating: Int
+    let points: Int
     
     enum CodingKeys: String, CodingKey {
         case id
         case url = "image_url"
         case date
-        case rating
+        case points = "rating"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
         url = try container.decodeIfPresent(URL.self, forKey: .url)
-        rating = try container.decode(Int.self, forKey: .rating)
+        points = try container.decode(Int.self, forKey: .points)
 
         let dateString = try container.decode(String.self, forKey: .date)
         let dateFormatter = DateFormatter()
