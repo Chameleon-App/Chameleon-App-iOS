@@ -13,8 +13,10 @@ class CalendarViewModel: ObservableObject {
         static let defaultPantoneTitleKey = "defaultPantoneTitle"
     }
     
-    @Published private(set) var viewState: CalendarViewState
     @Published var isPhotoLoadingErrorAlertPresented: Bool
+    
+    @Published private(set) var viewState: CalendarViewState
+    @Published private(set) var isActivityIndicatorPresented: Bool
     
     private let pantonesRepository: PantonesRepository
     private let photosRepository: PhotosRepository
@@ -28,6 +30,7 @@ class CalendarViewModel: ObservableObject {
         self.authenticationRepository = AuthenticationRepository()
         self.coordinator = coordinator
         self.isPhotoLoadingErrorAlertPresented = false
+        self.isActivityIndicatorPresented = false
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
         let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
@@ -131,10 +134,14 @@ class CalendarViewModel: ObservableObject {
             return handlePhotoLoadingError()
         }
         
+        Task { @MainActor in isActivityIndicatorPresented = true }
+        
         let photoUploadingResult = await photosRepository.uploadPhoto(
             jpegData: jpegData,
             authenticationToken: authenticationToken
         )
+        
+        Task { @MainActor in isActivityIndicatorPresented = false }
         
         switch photoUploadingResult {
         case .success:

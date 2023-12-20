@@ -59,7 +59,10 @@ struct CalendarView: View {
             case .loading(let loadingViewItem):
                 CalendarLoaingView(viewItem: loadingViewItem)
             case .content(let contentViewItem):
-                CalendarContentView(viewItem: contentViewItem)
+                CalendarContentView(
+                    viewItem: contentViewItem,
+                    isActivityIndicatorPresented: viewModel.isActivityIndicatorPresented
+                )
             case .error(let errorViewItem):
                 Text(errorViewItem.message)
             }
@@ -99,15 +102,26 @@ private struct CalendarLoaingView: View {
 
 private struct CalendarContentView: View {
     let viewItem: CalendarContentViewItem
+    let isActivityIndicatorPresented: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            CalendarHeaderView(
-                pantonesOfDay: viewItem.pantonesOfDay,
-                addPhotoHandleClosure: viewItem.addPhotoHandleClosure
-            )
-            Spacer()
+        ZStack {
+            VStack(spacing: 0) {
+                CalendarHeaderView(
+                    pantonesOfDay: viewItem.pantonesOfDay,
+                    addPhotoHandleClosure: viewItem.addPhotoHandleClosure
+                )
+                Spacer()
+            }
+            .opacity(isActivityIndicatorPresented ? 0.25 : 1)
+            if isActivityIndicatorPresented {
+                VStack {
+                    ProgressView()
+                        .controlSize(.large)
+                }
+            }
         }
+        .animation(.default, value: isActivityIndicatorPresented)
     }
 }
 
