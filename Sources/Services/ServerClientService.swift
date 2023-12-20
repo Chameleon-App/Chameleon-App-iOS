@@ -16,6 +16,12 @@ typealias ServerClientServiceRequestHeaders = HTTPHeaders
 struct EmptyParameters: Codable {}
 
 final class ServerClientService {
+    private enum Constants {
+        static let uploadingPhotoKey = "photo"
+        static let uploadingPhotoFileName = "file.jpeg"
+        static let uploadingPhotoMimeType = "image/jpeg"
+    }
+    
     static let shared = ServerClientService()
     
     private let serverBaseUrl: String
@@ -52,6 +58,36 @@ final class ServerClientService {
         )
     }
     
+    func upload<ReturnValue: Decodable>(
+        endpoint: String,
+        jpegData: Data,
+        headers: ServerClientServiceRequestHeaders? = nil
+    ) async -> ServerClientServiceResult<ReturnValue> {
+        let url = getUrlString(endpoint: endpoint)
+        
+        return await withCheckedContinuation { continuation in
+            AF.upload(
+                multipartFormData: {
+                    $0.append(
+                        jpegData,
+                        withName: Constants.uploadingPhotoKey,
+                        fileName: Constants.uploadingPhotoFileName,
+                        mimeType: Constants.uploadingPhotoMimeType
+                    )
+                },
+                to: url,
+                headers: headers
+            )
+            .responseDecodable(of: ReturnValue.self) { [weak self] response in
+                guard let result = self?.getResult(from: response.result) else {
+                    return
+                }
+                
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
     private func performRequest<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
         method: HTTPMethod,
@@ -59,9 +95,9 @@ final class ServerClientService {
         encoder: ParameterEncoder,
         headers: ServerClientServiceRequestHeaders?
     ) async -> ServerClientServiceResult<ReturnValue> {
-        let url = serverBaseUrl + endpoint
+        let url = getUrlString(endpoint: endpoint)
         
-        let response = await AF.request(
+        let rawResult = await AF.request(
             url,
             method: method,
             parameters: parameters,
@@ -71,23 +107,39 @@ final class ServerClientService {
         .serializingDecodable(ReturnValue.self)
         .result
         
-        switch response {
+        return getResult(from: rawResult)
+    }
+    
+    private func getUrlString(endpoint: String) -> String {
+        return serverBaseUrl + endpoint
+    }
+    
+    private func getResult<ReturnValue: Decodable>(
+        from rawResult: Result<ReturnValue, AFError>
+    ) -> ServerClientServiceResult<ReturnValue> {
+        switch rawResult {
         case .success(let returnValue):
             return .success(returnValue)
         case .failure(let rawError):
-            print(String(describing: rawError))
+            let error = getError(from: rawError)
             
-            let errorCode: ServerClientServiceError.Code
-            
-            if let rawErrorCode = rawError.responseCode {
-                errorCode = ServerClientServiceError.Code(rawValue: rawErrorCode)
-            } else {
-                errorCode = .unknown
-            }
-            
-            let error = ServerClientServiceError(errorCode)
-
             return .failure(error)
         }
+    }
+    
+    private func getError(from rawError: AFError) -> ServerClientServiceError {
+        print(String(describing: rawError))
+        
+        let errorCode: ServerClientServiceError.Code
+        
+        if let rawErrorCode = rawError.responseCode {
+            errorCode = ServerClientServiceError.Code(rawValue: rawErrorCode)
+        } else {
+            errorCode = .unknown
+        }
+        
+        let error = ServerClientServiceError(errorCode)
+
+        return error
     }
 }

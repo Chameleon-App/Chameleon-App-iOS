@@ -45,6 +45,12 @@ struct CalendarErrorViewItem {
 }
 
 struct CalendarView: View {
+    private enum Constants {
+        static let photoLoadingErrorTitleKey = "loginErrorTitle"
+        static let photoLoadingButtonTitleKey = "loginErrorButtonTitle"
+        static let photoLoadingDescriptionKey = "loginErrorDescription"
+    }
+    
     @ObservedObject var viewModel: CalendarViewModel
     
     var body: some View {
@@ -53,11 +59,29 @@ struct CalendarView: View {
             case .loading(let loadingViewItem):
                 CalendarLoaingView(viewItem: loadingViewItem)
             case .content(let contentViewItem):
-                CalendarContentView(viewItem: contentViewItem)
+                CalendarContentView(
+                    viewItem: contentViewItem,
+                    isActivityIndicatorPresented: viewModel.isActivityIndicatorPresented
+                )
             case .error(let errorViewItem):
                 Text(errorViewItem.message)
             }
         }
+        .alert(
+            String(localized: String.LocalizationValue(Constants.photoLoadingErrorTitleKey)),
+            isPresented: $viewModel.isPhotoLoadingErrorAlertPresented,
+            actions: {
+                Button(
+                    String(localized: String.LocalizationValue(Constants.photoLoadingButtonTitleKey)),
+                    role: .none,
+                    action: viewModel.handlePhotoLoadingErrorAlertButtonDidTap
+                )
+            },
+            message: {
+                Text(String(localized: String.LocalizationValue(Constants.photoLoadingDescriptionKey)))
+                    .foregroundColor(Color(.textPrimary))
+            }
+        )
         .animation(.default, value: viewModel.viewState)
         .onAppear { viewModel.handleViewDidAppear() }
     }
@@ -78,15 +102,26 @@ private struct CalendarLoaingView: View {
 
 private struct CalendarContentView: View {
     let viewItem: CalendarContentViewItem
+    let isActivityIndicatorPresented: Bool
     
     var body: some View {
-        VStack(spacing: 0) {
-            CalendarHeaderView(
-                pantonesOfDay: viewItem.pantonesOfDay,
-                addPhotoHandleClosure: viewItem.addPhotoHandleClosure
-            )
-            Spacer()
+        ZStack {
+            VStack(spacing: 0) {
+                CalendarHeaderView(
+                    pantonesOfDay: viewItem.pantonesOfDay,
+                    addPhotoHandleClosure: viewItem.addPhotoHandleClosure
+                )
+                Spacer()
+            }
+            .opacity(isActivityIndicatorPresented ? 0.25 : 1)
+            if isActivityIndicatorPresented {
+                VStack {
+                    ProgressView()
+                        .controlSize(.large)
+                }
+            }
         }
+        .animation(.default, value: isActivityIndicatorPresented)
     }
 }
 
@@ -151,8 +186,8 @@ private struct CalendarAddPhotoView: View {
         }
         .photosPickerDisabledCapabilities(.collectionNavigation)
         .onChange(of: selectedPhotoItem) {
-            selectedPhotoItem = nil
             addPhotoHandleClosure(selectedPhotoItem)
+            selectedPhotoItem = nil
         }
     }
 }

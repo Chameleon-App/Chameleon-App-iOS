@@ -13,15 +13,24 @@ class CalendarViewModel: ObservableObject {
         static let defaultPantoneTitleKey = "defaultPantoneTitle"
     }
     
+    @Published var isPhotoLoadingErrorAlertPresented: Bool
+    
     @Published private(set) var viewState: CalendarViewState
+    @Published private(set) var isActivityIndicatorPresented: Bool
     
     private let pantonesRepository: PantonesRepository
+    private let photosRepository: PhotosRepository
+    private let authenticationRepository: AuthenticationRepository
     
     private var coordinator: CalendarCoordinator
 
     init(coordinator: CalendarCoordinator) {
         self.pantonesRepository = PantonesRepository()
+        self.photosRepository = PhotosRepository()
+        self.authenticationRepository = AuthenticationRepository()
         self.coordinator = coordinator
+        self.isPhotoLoadingErrorAlertPresented = false
+        self.isActivityIndicatorPresented = false
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
         let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
@@ -39,6 +48,10 @@ class CalendarViewModel: ObservableObject {
     
     func handleViewDidAppear() {
         Task { await configurePantonesOfDay() }
+    }
+    
+    func handlePhotoLoadingErrorAlertButtonDidTap() {
+        isPhotoLoadingErrorAlertPresented = false
     }
     
     private func configurePantonesOfDay() async {
@@ -111,16 +124,34 @@ class CalendarViewModel: ObservableObject {
         }
     }
     
-    // TODO: Add error handling when a photo loading is ready
     private func handleAddPhotoButtonDidTap(selectedPhoto: PhotosPickerItem) async {
-        do {
-            guard let imageData = try await selectedPhoto.loadTransferable(type: Data.self) else {
-                return
-            }
-            
-            print(imageData.base64EncodedString())
-        } catch {
-            print(error)
+        guard
+            let imageData = try? await selectedPhoto.loadTransferable(type: Data.self),
+            let image = UIImage(data: imageData),
+            let jpegData = image.jpegData(compressionQuality: .one),
+            let authenticationToken = authenticationRepository.getAuthenticationToken()
+        else {
+            return handlePhotoLoadingError()
         }
+        
+        Task { @MainActor in isActivityIndicatorPresented = true }
+        
+        let photoUploadingResult = await photosRepository.uploadPhoto(
+            jpegData: jpegData,
+            authenticationToken: authenticationToken
+        )
+        
+        Task { @MainActor in isActivityIndicatorPresented = false }
+        
+        switch photoUploadingResult {
+        case .success:
+            print("Success")
+        case .failure:
+            handlePhotoLoadingError()
+        }
+    }
+    
+    private func handlePhotoLoadingError() {
+        Task { @MainActor in isPhotoLoadingErrorAlertPresented = true }
     }
 }
