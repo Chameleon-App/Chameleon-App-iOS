@@ -88,6 +88,12 @@ struct CalendarView: View {
                     .foregroundColor(Color(.textPrimary))
             }
         )
+        .sheet(isPresented: $viewModel.isNeedToShowSuccessPhotoLoadingSheet) {
+            CalendarSuccessPhotoLoadingSheetView(
+                points: viewModel.lastLoadedPhotoPoints,
+                buttonDidTapClosure: viewModel.handleSuccessPhotoLoadingSheetButtonDidTap
+            )
+        }
         .animation(.default, value: viewModel.viewState)
         .onAppear { viewModel.handleViewDidAppear() }
     }
@@ -301,6 +307,58 @@ private struct CalendarErrorView: View {
         VStack(spacing: 16) {
             Image(.ic64ExclamationmarkCircle)
             Text(String(localized: String.LocalizationValue(Constants.errorTitleKey)))
+        }
+    }
+}
+
+private struct CalendarSuccessPhotoLoadingSheetView: View {
+    private enum Constants {
+        static let chameleonButtonTitleKey = "chameleonTitle"
+        static let goodPhotoTitleKey = "calendarGoodPhotoTitle"
+    }
+    
+    @State private var pointsDisplayString: String = .empty
+    
+    private let presentationDetent: PresentationDetent
+    private let points: Int
+    private let buttonDidTapClosure: Closure.Void
+    
+    init(points: Int, buttonDidTapClosure: @escaping Closure.Void) {
+        let sheetHeight: CGFloat = 291
+        
+        self.presentationDetent = .height(sheetHeight)
+        self.points = points
+        self.buttonDidTapClosure = buttonDidTapClosure
+    }
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(.ic64CheckmarkCircle)
+            Text(String(localized: String.LocalizationValue(Constants.goodPhotoTitleKey)))
+                .foregroundStyle(Color(.textPrimary))
+                .font(.titlePrimary)
+            Text(pointsDisplayString)
+                .foregroundStyle(Color(.textPrimary))
+                .font(.headingPrimary)
+                .animation(.default, value: pointsDisplayString)
+            ButtonView(
+                styleType: .primary,
+                content: String(localized: String.LocalizationValue(Constants.chameleonButtonTitleKey)),
+                action: buttonDidTapClosure
+            )
+        }
+        .padding(.horizontal, 46)
+        .padding(.top, 48)
+        .padding(.bottom, 12)
+        .presentationDragIndicator(.hidden)
+        .presentationDetents([presentationDetent])
+        .onAppear {
+            (0...points).enumerated().forEach { offset, element in
+                Task {
+                    try? await Task.sleep(nanoseconds: UInt64(offset * 30_000_000))
+                    pointsDisplayString = String(element)
+                }
+            }
         }
     }
 }
