@@ -116,29 +116,53 @@ private struct CalendarLoaingView: View {
 }
 
 private struct CalendarContentView: View {
+    private enum Constants {
+        static let emptyDescriptionKey = "calendarEmptyDescription"
+    }
+    
     let viewItem: CalendarContentViewItem
     let isActivityIndicatorPresented: Bool
     
     var body: some View {
-        ZStack {
-            ScrollView {
+        Group {
+            if viewItem.cells.isEmpty {
                 VStack(spacing: 0) {
                     CalendarHeaderView(
                         pantonesOfDay: viewItem.pantonesOfDay,
                         selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
                         cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
                     )
-                    ForEach(viewItem.cells) {
-                        CalendarContentCellView(viewItem: $0)
-                            .padding(.top, 10)
-                    }
+                    Spacer()
+                    Image(.ic64Fireworks)
+                    Spacer()
+                        .frame(height: 16)
+                    Text(String(localized: String.LocalizationValue(Constants.emptyDescriptionKey)))
+                        .foregroundStyle(Color(.textPrimary))
+                        .font(.bodyBig)
+                    Spacer()
                 }
-            }
-            .opacity(isActivityIndicatorPresented ? 0.25 : 1)
-            if isActivityIndicatorPresented {
-                VStack {
-                    ProgressView()
-                        .controlSize(.large)
+            } else {
+                ZStack {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            CalendarHeaderView(
+                                pantonesOfDay: viewItem.pantonesOfDay,
+                                selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
+                                cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
+                            )
+                            ForEach(viewItem.cells) {
+                                CalendarContentCellView(viewItem: $0)
+                                    .padding(.top, 10)
+                            }
+                        }
+                    }
+                    .opacity(isActivityIndicatorPresented ? 0.25 : 1)
+                    if isActivityIndicatorPresented {
+                        VStack {
+                            ProgressView()
+                                .controlSize(.large)
+                        }
+                    }
                 }
             }
         }

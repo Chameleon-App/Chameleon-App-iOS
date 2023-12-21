@@ -18,6 +18,23 @@
         }
       }
     },
+    "calendarEmptyDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your photos will be here"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваши фото будут здесь"
+          }
+        }
+      }
+    },
     "calendarTabTitle" : {
       "extractionState" : "manual",
       "localizations" : {
