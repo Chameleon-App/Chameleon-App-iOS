@@ -33,8 +33,8 @@ class CalendarViewModel: ObservableObject {
         self.coordinator = coordinator
         self.isPhotoLoadingErrorAlertPresented = false
         self.isActivityIndicatorPresented = false
+        self.isNeedToShowSuccessPhotoLoadingSheet = false
         self.lastLoadedPhotoPoints = .zero
-        self.isNeedToShowSuccessPhotoLoadingSheet = true
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
         let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
@@ -219,8 +219,12 @@ class CalendarViewModel: ObservableObject {
             Task { @MainActor in isActivityIndicatorPresented = false }
             
             switch photoUploadingResult {
-            case .success:
+            case .success(let successModel):
                 await configurePantonesOfDayAndPhotosBydays()
+                Task { @MainActor in
+                    self.lastLoadedPhotoPoints = successModel.points
+                    self.isNeedToShowSuccessPhotoLoadingSheet = true
+                }
             case .failure:
                 handlePhotoLoadingError()
             }

@@ -356,7 +356,7 @@ private struct CalendarSuccessPhotoLoadingSheetView: View {
             (0...points).enumerated().forEach { offset, element in
                 Task {
                     try? await Task.sleep(nanoseconds: UInt64(offset * 30_000_000))
-                    pointsDisplayString = String(element)
+                    self.pointsDisplayString = String(element)
                 }
             }
         }
