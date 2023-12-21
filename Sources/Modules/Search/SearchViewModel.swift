@@ -29,7 +29,8 @@ final class SearchViewModel: ObservableObject {
         Task {
             switch await getPhotos() {
             case .success(let photos):
-                let photoViewItems = photos.map { getPhotoViewItem(from: $0) }
+                let sortedPhotos = photos.sorted(by: { $0.date > $1.date })
+                let photoViewItems = sortedPhotos.map { getPhotoViewItem(from: $0) }
                 let contentViewItem = SearchContentViewItem(photos: photoViewItems)
                 
                 Task { @MainActor in viewState = .content(contentViewItem) }
