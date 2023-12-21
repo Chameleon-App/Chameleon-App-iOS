@@ -121,15 +121,14 @@ class CalendarViewModel: ObservableObject {
             return CalendarContentCellViewItem(
                 dateString: dateString,
                 triplePantoneFeed: triplePantoneFeed,
-                photos: photos
+                photos: photos,
+                isToday: isToday
             )
         }
     }
     
     private func handleError(_ error: ServerClientServiceError) {
-        let errorMessage = error.localizedDescription
-        let errorViewItem = CalendarErrorViewItem(message: errorMessage)
-        let errorViewState = CalendarViewState.error(errorViewItem)
+        let errorViewState = CalendarViewState.error
         
         updateViewState(to: errorViewState)
     }

@@ -28,7 +28,8 @@ final class AuthenticationRepository {
             return nil
         }
         
-        return Constants.authenticationTokenPrefix + rawToken
+//        return Constants.authenticationTokenPrefix + rawToken
+        return Constants.authenticationTokenPrefix + "62901f690e50e561444fe8b55edd78747ba6dd0e"
     }
     
     func login(username: String, password: String) async -> ServerClientServiceResult<Void> {

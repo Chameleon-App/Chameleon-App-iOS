@@ -69,6 +69,40 @@
         }
       }
     },
+    "defaultErrorDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что-то пошло не так"
+          }
+        }
+      }
+    },
+    "defaultErrorTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ooops"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ууупс"
+          }
+        }
+      }
+    },
     "defaultPantoneTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -116,40 +150,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Грусть"
-          }
-        }
-      }
-    },
-    "loginErrorDescription" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Something went wrong"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Что-то пошло не так"
-          }
-        }
-      }
-    },
-    "loginErrorTitle" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ooops"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ууупс"
           }
         }
       }

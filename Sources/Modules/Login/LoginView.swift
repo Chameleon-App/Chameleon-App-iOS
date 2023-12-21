@@ -17,9 +17,9 @@ struct LoginView: View {
         static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
         static let passwordTitleKey = "passwordTitle"
         static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
-        static let loginErrorTitleKey = "loginErrorTitle"
+        static let loginErrorTitleKey = "defaultErrorTitle"
         static let loginErrorButtonTitleKey = "loginErrorButtonTitle"
-        static let loginErrorDescriptionKey = "loginErrorDescription"
+        static let loginErrorDescriptionKey = "defaultErrorDescription"
     }
     
     @ObservedObject var viewModel: LoginViewModel
