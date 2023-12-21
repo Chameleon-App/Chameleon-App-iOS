@@ -38,23 +38,19 @@ final class PhotosRepository {
         )
     }
     
-    func uploadPhoto(jpegData: Data, authenticationToken: String) async -> ServerClientServiceResult<Void> {
+    func uploadPhoto(
+        jpegData: Data,
+        authenticationToken: String
+    ) async -> ServerClientServiceResult<UploadPhotoSuccessResultModel> {
         let headers: ServerClientServiceRequestHeaders = [
             Constants.authorizationHeaderKey: authenticationToken
         ]
         
-        let result: ServerClientServiceResult<UploadPhotoSuccessResultModel> = await ServerClientService.shared.upload(
+        return await ServerClientService.shared.upload(
             endpoint: Constants.URLPath.uploadPhotoEndpoint.rawValue,
             jpegData: jpegData,
             headers: headers
         )
-        
-        switch result {
-        case .success:
-            return .success(Void())
-        case .failure(let error):
-            return .failure(error)
-        }
     }
 }
 

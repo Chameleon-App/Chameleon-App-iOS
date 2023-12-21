@@ -14,9 +14,11 @@ class CalendarViewModel: ObservableObject {
     }
     
     @Published var isPhotoLoadingErrorAlertPresented: Bool
+    @Published var isNeedToShowSuccessPhotoLoadingSheet: Bool
     
     @Published private(set) var viewState: CalendarViewState
     @Published private(set) var isActivityIndicatorPresented: Bool
+    @Published private(set) var lastLoadedPhotoPoints: Int
     
     private let pantonesRepository: PantonesRepository
     private let photosRepository: PhotosRepository
@@ -31,6 +33,8 @@ class CalendarViewModel: ObservableObject {
         self.coordinator = coordinator
         self.isPhotoLoadingErrorAlertPresented = false
         self.isActivityIndicatorPresented = false
+        self.isNeedToShowSuccessPhotoLoadingSheet = false
+        self.lastLoadedPhotoPoints = .zero
         
         let pantoneTitle = String(localized: String.LocalizationValue(Constants.defaultPantoneTitleKey))
         let pantoneOfDayPlaceholder = PantoneFeedViewItem(color: Color(.placeholderPrimary), name: pantoneTitle)
@@ -52,6 +56,10 @@ class CalendarViewModel: ObservableObject {
     
     func handlePhotoLoadingErrorAlertButtonDidTap() {
         isPhotoLoadingErrorAlertPresented = false
+    }
+    
+    func handleSuccessPhotoLoadingSheetButtonDidTap() {
+        isNeedToShowSuccessPhotoLoadingSheet = false
     }
     
     private func configurePantonesOfDayAndPhotosBydays() async {
@@ -211,8 +219,12 @@ class CalendarViewModel: ObservableObject {
             Task { @MainActor in isActivityIndicatorPresented = false }
             
             switch photoUploadingResult {
-            case .success:
+            case .success(let successModel):
                 await configurePantonesOfDayAndPhotosBydays()
+                Task { @MainActor in
+                    self.lastLoadedPhotoPoints = successModel.points
+                    self.isNeedToShowSuccessPhotoLoadingSheet = true
+                }
             case .failure:
                 handlePhotoLoadingError()
             }
