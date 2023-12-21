@@ -256,6 +256,23 @@
         }
       }
     },
+    "maxLengthRuleTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max length: "
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Максимальная длина: "
+          }
+        }
+      }
+    },
     "minLengthRuleTitle" : {
       "extractionState" : "manual",
       "localizations" : {

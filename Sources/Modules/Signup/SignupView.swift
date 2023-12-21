@@ -13,6 +13,10 @@ struct SignupView: View {
         static let loginTitleKey = "signupScreenLoginTitle"
         static let loginColoredPartTitleKey = "signupScreenLoginColoredPartTitle"
         static let signupButtonTitleKey = "signupButtonTitle"
+        static let usernameTitleKey = "usernameTitle"
+        static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
+        static let passwordTitleKey = "passwordTitle"
+        static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
     }
     
     @ObservedObject var viewModel: SignupViewModel
@@ -23,6 +27,35 @@ struct SignupView: View {
                 VStack(spacing: 0) {
                     LoginSignupHeaderView(titleKey: Constants.signupTitleKey)
                 }
+                Spacer()
+                    .frame(height: 34)
+                Group {
+                    TextFieldView(
+                        inputText: $viewModel.usernameInputText,
+                        isInputTextValid: viewModel.isUsernameValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getUsernameFieldValidationRules(),
+                        handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
+                    )
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    TextFieldView(
+                        inputText: $viewModel.passwordInputText,
+                        isInputTextValid: viewModel.isPasswordValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getPasswordFieldValidationRules(),
+                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                    )
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                }
+                .padding(.horizontal, 12)
             }
             .ignoresSafeArea()
             LoginSignupBottomView(
