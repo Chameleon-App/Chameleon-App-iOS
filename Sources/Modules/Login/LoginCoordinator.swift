@@ -14,8 +14,8 @@ final class LoginCoordinator {
         router?.updateRootViewController(viewController: tabBarController)
     }
     
-    func openRegistrationScreen() {
-        let viewController = RegistrationFactory.createRegistrationViewController()
+    func openSignupScreen() {
+        let viewController = SignupFactory.createSignupViewController()
         
         router?.updateRootViewController(viewController: viewController)
     }

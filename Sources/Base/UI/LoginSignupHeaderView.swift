@@ -1,5 +1,5 @@
 //
-//  LoginRegistrationHeaderView.swift
+//  LoginSignupHeaderView.swift
 //  chameleon
 //
 //  Created by Илья Чуб on 21.12.2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoginRegistrationHeaderView: View {
+struct LoginSignupHeaderView: View {
     var body: some View {
         VStack {
             Spacer()

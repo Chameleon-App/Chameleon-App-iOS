@@ -39,7 +39,7 @@ final class LoginViewModel: ObservableObject {
     }
     
     func handleSignupButtonDidTap() {
-        openRegistrationScreen()
+        openSignupScreen()
     }
     
     func getTextFieldsValidationRules() -> [TextFieldValidationRule] {
@@ -92,7 +92,7 @@ final class LoginViewModel: ObservableObject {
         Task { @MainActor in coordinator.openMainScreen() }
     }
     
-    private func openRegistrationScreen() {
-        Task { @MainActor in coordinator.openRegistrationScreen() }
+    private func openSignupScreen() {
+        Task { @MainActor in coordinator.openSignupScreen() }
     }
 }

@@ -70,7 +70,7 @@ struct LoginView: View {
                         }
                         .padding(.horizontal, 12)
                     }
-                    LoginRegistrationHeaderView()
+                    LoginSignupHeaderView()
                     .alert(
                         String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
                         isPresented: $viewModel.isErrorAlertPresented,
@@ -90,23 +90,13 @@ struct LoginView: View {
                 }
             }
             .ignoresSafeArea()
-            VStack {
-                Spacer()
-                ButtonView(
-                    styleType: .primary,
-                    content: String(localized: String.LocalizationValue(Constants.loginTitleKey)),
-                    action: viewModel.handleLoginButtonDidTap
-                )
-                .padding(.horizontal, 62)
-                .disabled(viewModel.isLoginButtonDisabled)
-                Spacer()
-                    .frame(height: 12)
-                Text(getSignupTitle())
-                    .font(.bodySmall)
-                    .onTapGesture(perform: viewModel.handleSignupButtonDidTap)
-                Spacer()
-                    .frame(height: 24)
-            }
+            LoginSignupBottomView(
+                buttonTitleKey: Constants.loginTitleKey,
+                handleButtonDidTapClosure: viewModel.handleLoginButtonDidTap,
+                isButtonDisabled: viewModel.isLoginButtonDisabled,
+                title: getSignupTitle(),
+                handleTitleDidTapClosure: viewModel.handleSignupButtonDidTap
+            )
         }
         .resignResponderOnTap()
     }
