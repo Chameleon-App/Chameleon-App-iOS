@@ -21,9 +21,9 @@ struct SignupView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     LoginSignupHeaderView()
-                        .ignoresSafeArea()
                 }
             }
+            .ignoresSafeArea()
             LoginSignupBottomView(
                 buttonTitleKey: Constants.signupButtonTitleKey,
                 handleButtonDidTapClosure: viewModel.handleSignupButtonDidTap,
