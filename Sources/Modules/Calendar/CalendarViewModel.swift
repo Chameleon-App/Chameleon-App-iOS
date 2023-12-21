@@ -47,31 +47,42 @@ class CalendarViewModel: ObservableObject {
     }
     
     func handleViewDidAppear() {
-        Task { await configurePantonesOfDay() }
+        Task { await configurePantonesOfDayAndPhotosBydays() }
     }
     
     func handlePhotoLoadingErrorAlertButtonDidTap() {
         isPhotoLoadingErrorAlertPresented = false
     }
     
-    private func configurePantonesOfDay() async {
-        switch await pantonesRepository.getPantonesOfDay() {
-        case .success(let pantonesOfDay):
-            handleSeccessResult(pantonesOfDay: pantonesOfDay)
-        case .failure(let error):
+    private func configurePantonesOfDayAndPhotosBydays() async {
+        guard let authenticationToken = authenticationRepository.getAuthenticationToken() else {
+            return openLoginScreen()
+        }
+        
+        async let getPantonesOfDayResult = pantonesRepository.getPantonesOfDay()
+        async let getPhotosByDaysResult = photosRepository.getPhotosByDays(authenticationToken: authenticationToken)
+        
+        switch await (getPantonesOfDayResult, getPhotosByDaysResult) {
+        case (.success(let pantonesOfDay), .success(let photosByDays)):
+            handleSeccessResult(pantonesOfDay: pantonesOfDay, photosByDays: photosByDays)
+        case (.failure(let error), _), (_, .failure(let error)):
             handleError(error)
         }
     }
     
-    private func handleSeccessResult(pantonesOfDay successResult: PantonesOfDayModel) {
-        guard let pantonesOfDayViewItem = mapPantonesOfDayToTriplePantoneFeedViewItem(
-            pantonesOfDay: successResult
+    private func handleSeccessResult(pantonesOfDay: PantonesOfDayModel, photosByDays: [PhotosOfDayModel]) {
+        guard let pantonesOfDayViewItem = mapPantonesToTriplePantoneFeedViewItem(
+            pantones: pantonesOfDay.pantones,
+            isNeedDoAddNames: true
         ) else {
             return handleError(ServerClientServiceError(.unknown))
         }
         
+        let calendarContentCells = mapPhotosByDaysToCalendarContentCells(photosByDays)
+        
         let contentViewItem = CalendarContentViewItem(
             pantonesOfDay: pantonesOfDayViewItem,
+            cells: calendarContentCells,
             selectPhotoHandleClosure: { [weak self] in
                 return await self?.getImage(from: $0)
             },
@@ -84,10 +95,40 @@ class CalendarViewModel: ObservableObject {
         updateViewState(to: contentViewState)
     }
     
+    private func mapPhotosByDaysToCalendarContentCells(
+        _ photosByDays: [PhotosOfDayModel]
+    ) -> [CalendarContentCellViewItem] {
+        let sortedPhotosByDats = photosByDays.sorted(by: { $0.date > $1.date })
+        
+        return sortedPhotosByDats.compactMap {
+            guard let dateString = DateService.getFormattedDate(
+                date: $0.date,
+                format: .monthAndDate,
+                isNeedToFormatToday: true
+            ) else {
+                return nil
+            }
+            
+            let isToday = DateService.getIsToday(date: $0.date)
+            let triplePantoneFeed = isToday
+            ? nil
+            : mapPantonesToTriplePantoneFeedViewItem(
+                pantones: $0.pantones,
+                isNeedDoAddNames: false
+            )
+            let photos = $0.photos.map { mapPhotoToEvaluationFeedImage($0) }
+            
+            return CalendarContentCellViewItem(
+                dateString: dateString,
+                triplePantoneFeed: triplePantoneFeed,
+                photos: photos,
+                isToday: isToday
+            )
+        }
+    }
+    
     private func handleError(_ error: ServerClientServiceError) {
-        let errorMessage = error.localizedDescription
-        let errorViewItem = CalendarErrorViewItem(message: errorMessage)
-        let errorViewState = CalendarViewState.error(errorViewItem)
+        let errorViewState = CalendarViewState.error
         
         updateViewState(to: errorViewState)
     }
@@ -96,24 +137,44 @@ class CalendarViewModel: ObservableObject {
         Task { @MainActor in self.viewState = newViewState }
     }
     
-    private func mapPantonesOfDayToTriplePantoneFeedViewItem(
-        pantonesOfDay: PantonesOfDayModel
+    private func mapPantonesToTriplePantoneFeedViewItem(
+        pantones: [PantoneModel],
+        isNeedDoAddNames: Bool
     ) -> TriplePantoneFeedViewItem? {
-        if pantonesOfDay.pantones.count != TriplePantoneFeedView.Constants.countOfPantones {
+        if pantones.count != TriplePantoneFeedView.Constants.countOfPantones {
             return nil
         }
         
-        let leftPantone = pantonesOfDay.pantones[0]
-        let leftPantoneViewItem = PantoneFeedViewItem(hex: leftPantone.hex, name: leftPantone.name)
-        let middlePantone = pantonesOfDay.pantones[1]
-        let middlePantoneViewItem = PantoneFeedViewItem(hex: middlePantone.hex, name: middlePantone.name)
-        let rightPantone = pantonesOfDay.pantones[2]
-        let rightPantoneViewItem = PantoneFeedViewItem(hex: rightPantone.hex, name: rightPantone.name)
+        let leftPantone = pantones[0]
+        let leftPantoneViewItem = PantoneFeedViewItem(
+            hex: leftPantone.hex,
+            name: isNeedDoAddNames ? leftPantone.name : nil
+        )
+        let middlePantone = pantones[1]
+        let middlePantoneViewItem = PantoneFeedViewItem(
+            hex: middlePantone.hex,
+            name: isNeedDoAddNames ? middlePantone.name : nil
+        )
+        let rightPantone = pantones[2]
+        let rightPantoneViewItem = PantoneFeedViewItem(
+            hex: rightPantone.hex,
+            name: isNeedDoAddNames ? rightPantone.name : nil
+        )
         
         return TriplePantoneFeedViewItem(
             left: leftPantoneViewItem,
             middle: middlePantoneViewItem,
             right: rightPantoneViewItem
+        )
+    }
+    
+    private func mapPhotoToEvaluationFeedImage(_ photo: RatedPhotoModel) -> EvaluationFeedImageViewItem {
+        return EvaluationFeedImageViewItem(
+            id: photo.id,
+            url: photo.url,
+            points: photo.points,
+            date: nil,
+            authorImageUrl: nil
         )
     }
     
@@ -131,11 +192,11 @@ class CalendarViewModel: ObservableObject {
     }
     
     private func handlePhotoDidCrop(image: UIImage?) {
-        guard
-            let image,
-            let jpegData = image.jpegData(compressionQuality: .one),
-            let authenticationToken = authenticationRepository.getAuthenticationToken()
-        else {
+        guard let authenticationToken = authenticationRepository.getAuthenticationToken() else {
+            return openLoginScreen()
+        }
+        
+        guard let image, let jpegData = image.jpegData(compressionQuality: .one) else {
             return handlePhotoLoadingError()
         }
         
@@ -151,7 +212,7 @@ class CalendarViewModel: ObservableObject {
             
             switch photoUploadingResult {
             case .success:
-                print("Success")
+                await configurePantonesOfDayAndPhotosBydays()
             case .failure:
                 handlePhotoLoadingError()
             }
@@ -160,5 +221,9 @@ class CalendarViewModel: ObservableObject {
     
     private func handlePhotoLoadingError() {
         Task { @MainActor in isPhotoLoadingErrorAlertPresented = true }
+    }
+    
+    private func openLoginScreen() {
+        Task { @MainActor in coordinator.openLoginScreen() }
     }
 }

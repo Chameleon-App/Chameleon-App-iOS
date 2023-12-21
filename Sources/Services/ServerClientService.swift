@@ -107,6 +107,10 @@ final class ServerClientService {
         .serializingDecodable(ReturnValue.self)
         .result
         
+        if case .failure = rawResult {
+            print(ReturnValue.self)
+        }
+        
         return getResult(from: rawResult)
     }
     

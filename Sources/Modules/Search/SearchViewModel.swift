@@ -47,7 +47,7 @@ final class SearchViewModel: ObservableObject {
         return EvaluationFeedImageViewItem(
             id: photo.id,
             url: photo.url,
-            points: photo.rating,
+            points: photo.points,
             date: photo.date,
             authorImageUrl: nil
         )

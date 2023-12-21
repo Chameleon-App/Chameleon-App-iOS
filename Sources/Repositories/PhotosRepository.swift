@@ -12,9 +12,21 @@ final class PhotosRepository {
         enum URLPath: String {
             case getTopPhotosEndpoint = "/api/photos/top/"
             case uploadPhotoEndpoint = "/api/photos/rate/"
+            case getPhotosByDaysEndpoint = "/api/days/"
         }
         
         static let authorizationHeaderKey = "Authorization"
+    }
+    
+    func getPhotosByDays(authenticationToken: String) async -> ServerClientServiceResult<[PhotosOfDayModel]> {
+        let headers: ServerClientServiceRequestHeaders = [
+            Constants.authorizationHeaderKey: authenticationToken
+        ]
+        
+        return await ServerClientService.shared.get(
+            endpoint: Constants.URLPath.getPhotosByDaysEndpoint.rawValue,
+            headers: headers
+        )
     }
     
     func getTopPhotos(limit: Int) async -> ServerClientServiceResult<[RatedPhotoModel]> {

@@ -64,7 +64,7 @@ struct ButtonViewStyle: ButtonStyle {
             .foregroundColor(foregroundColor)
             .tint(foregroundColor)
             .background(backgroundColor)
-            .font(.bodyBig)
+            .font(.titlePrimary)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .animation(.default, value: isEnabled)
     }

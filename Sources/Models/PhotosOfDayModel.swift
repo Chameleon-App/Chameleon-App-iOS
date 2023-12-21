@@ -1,31 +1,26 @@
 //
-//  RatedPhotoModel.swift
+//  PhotosOfDayModel.swift
 //  chameleon
 //
-//  Created by Ilia Chub on 15.12.2023.
+//  Created by Ilia Chub on 21.12.2023.
 //
 
 import Foundation
 
-struct RatedPhotoModel: Decodable, Identifiable {
-    let id: Int
-    let url: URL?
+struct PhotosOfDayModel: Decodable {
     let date: Date
-    let points: Int
+    let pantones: [PantoneModel]
+    let photos: [RatedPhotoModel]
     
     enum CodingKeys: String, CodingKey {
-        case id
-        case url = "image_url"
         case date
-        case points = "rating"
+        case pantones = "colors"
+        case photos
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(Int.self, forKey: .id)
-        url = try container.decodeIfPresent(URL.self, forKey: .url)
-        points = try container.decode(Int.self, forKey: .points)
-
+        
         let dateString = try container.decode(String.self, forKey: .date)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = DateService.Constants.backendDateFormat
@@ -34,6 +29,8 @@ struct RatedPhotoModel: Decodable, Identifiable {
             throw DecodingError.dataCorruptedError(forKey: .date, in: container, debugDescription: .empty)
         }
         
-        date = dateDecoded
+        self.date = dateDecoded
+        self.pantones = try container.decode(Array<PantoneModel>.self, forKey: .pantones)
+        self.photos = try container.decode(Array<RatedPhotoModel>.self, forKey: .photos)
     }
 }

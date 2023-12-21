@@ -12,14 +12,12 @@ import SwiftyCrop
 enum CalendarViewState: Equatable {
     case loading(CalendarLoadingViewItem)
     case content(CalendarContentViewItem)
-    case error(CalendarErrorViewItem)
+    case error
     
     static func == (lhs: CalendarViewState, rhs: CalendarViewState) -> Bool {
         switch (lhs, rhs) {
-        case (.loading, .loading):
+        case (.loading, .loading), (.error, .error):
             return true
-        case (.error(let lhsError), .error(let rhsError)):
-            return lhsError.message == rhsError.message
         case (.content(let lhsContent), .content(let rhsContent)):
             return lhsContent == rhsContent
         default:
@@ -34,23 +32,29 @@ struct CalendarLoadingViewItem: Equatable {
 
 struct CalendarContentViewItem: Equatable {
     let pantonesOfDay: TriplePantoneFeedViewItem
+    let cells: [CalendarContentCellViewItem]
     let selectPhotoHandleClosure: ((PhotosPickerItem) async -> UIImage?)?
     let cropPhotoHandleClosure: Closure.Generic<UIImage?>?
     
     static func == (lhs: CalendarContentViewItem, rhs: CalendarContentViewItem) -> Bool {
-        return lhs.pantonesOfDay == rhs.pantonesOfDay
+        return lhs.pantonesOfDay == rhs.pantonesOfDay && lhs.cells == rhs.cells
     }
 }
 
-struct CalendarErrorViewItem {
-    let message: String
+struct CalendarContentCellViewItem: Identifiable, Equatable {
+    var id: String { dateString }
+    
+    let dateString: String
+    let triplePantoneFeed: TriplePantoneFeedViewItem?
+    let photos: [EvaluationFeedImageViewItem]
+    let isToday: Bool
 }
 
 struct CalendarView: View {
     private enum Constants {
-        static let photoLoadingErrorTitleKey = "loginErrorTitle"
+        static let photoLoadingErrorTitleKey = "defaultErrorTitle"
         static let photoLoadingButtonTitleKey = "loginErrorButtonTitle"
-        static let photoLoadingDescriptionKey = "loginErrorDescription"
+        static let photoLoadingDescriptionKey = "defaultErrorDescription"
     }
     
     @ObservedObject var viewModel: CalendarViewModel
@@ -65,8 +69,8 @@ struct CalendarView: View {
                     viewItem: contentViewItem,
                     isActivityIndicatorPresented: viewModel.isActivityIndicatorPresented
                 )
-            case .error(let errorViewItem):
-                Text(errorViewItem.message)
+            case .error:
+                CalendarErrorView()
             }
         }
         .alert(
@@ -107,28 +111,91 @@ private struct CalendarLoaingView: View {
 }
 
 private struct CalendarContentView: View {
+    private enum Constants {
+        static let emptyDescriptionKey = "calendarEmptyDescription"
+    }
+    
     let viewItem: CalendarContentViewItem
     let isActivityIndicatorPresented: Bool
     
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                CalendarHeaderView(
-                    pantonesOfDay: viewItem.pantonesOfDay,
-                    selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
-                    cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
-                )
-                Spacer()
-            }
-            .opacity(isActivityIndicatorPresented ? 0.25 : 1)
-            if isActivityIndicatorPresented {
-                VStack {
-                    ProgressView()
-                        .controlSize(.large)
+        Group {
+            if viewItem.cells.isEmpty {
+                VStack(spacing: 0) {
+                    CalendarHeaderView(
+                        pantonesOfDay: viewItem.pantonesOfDay,
+                        selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
+                        cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
+                    )
+                    Spacer()
+                    Image(.ic64Fireworks)
+                    Spacer()
+                        .frame(height: 16)
+                    Text(String(localized: String.LocalizationValue(Constants.emptyDescriptionKey)))
+                        .foregroundStyle(Color(.textPrimary))
+                        .font(.bodyBig)
+                    Spacer()
+                }
+            } else {
+                ZStack {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            CalendarHeaderView(
+                                pantonesOfDay: viewItem.pantonesOfDay,
+                                selectPhotoHandleClosure: viewItem.selectPhotoHandleClosure,
+                                cropPhotoHandleClosure: viewItem.cropPhotoHandleClosure
+                            )
+                            ForEach(viewItem.cells) {
+                                CalendarContentCellView(viewItem: $0)
+                                    .padding(.top, 10)
+                            }
+                            Spacer()
+                                .frame(height: 20)
+                        }
+                    }
+                    .opacity(isActivityIndicatorPresented ? 0.25 : 1)
+                    if isActivityIndicatorPresented {
+                        VStack {
+                            ProgressView()
+                                .controlSize(.large)
+                        }
+                    }
                 }
             }
         }
         .animation(.default, value: isActivityIndicatorPresented)
+        .animation(.default, value: viewItem)
+    }
+}
+
+private struct CalendarContentCellView: View {
+    let viewItem: CalendarContentCellViewItem
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible(), spacing: 1),
+        GridItem(.flexible())
+    ]
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(viewItem.dateString)
+                    .foregroundStyle(Color(.textPrimary))
+                    .font(viewItem.isToday ? .titlePrimary : .bodyBig)
+                Spacer()
+                if let triplePantoneFeed = viewItem.triplePantoneFeed {
+                    TriplePantoneFeedView(viewItem: triplePantoneFeed, pantoneWidth: 25)
+                }
+            }
+            .padding(.horizontal, 8)
+            LazyVGrid(columns: columns, spacing: 1) {
+                ForEach(viewItem.photos) {
+                    EvaluatedImageFeedView(viewItem: $0)
+                        .aspectRatio(1, contentMode: .fit)
+                }
+            }
+            .padding(.horizontal, 1)
+        }
     }
 }
 
@@ -221,6 +288,19 @@ private struct CalendarAddPhotoView: View {
                     self.selectedImage = nil
                 }
             }
+        }
+    }
+}
+
+private struct CalendarErrorView: View {
+    private enum Constants {
+        static let errorTitleKey = "defaultErrorTitle"
+    }
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(.ic64ExclamationmarkCircle)
+            Text(String(localized: String.LocalizationValue(Constants.errorTitleKey)))
         }
     }
 }
