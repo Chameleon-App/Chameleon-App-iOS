@@ -36,7 +36,6 @@ struct LoginView: View {
                 Group {
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
-                        isInputTextValid: $viewModel.isUsernameValid,
                         headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
@@ -46,13 +45,13 @@ struct LoginView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.passwordInputText,
-                        isInputTextValid: $viewModel.isPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
                         ),
                         validationRules: viewModel.getTextFieldsValidationRules(),
-                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid },
+                        isSecure: true
                     )
                 }
                 .padding(.horizontal, 12)

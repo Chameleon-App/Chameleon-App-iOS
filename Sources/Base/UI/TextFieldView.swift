@@ -16,7 +16,6 @@ enum TextFieldValidationRule {
 }
 
 struct TextFieldView: View {
-    @Binding private var isInputTextValid: Bool
     @Binding private var inputText: String
     @FocusState private var isFocused: Bool
     
@@ -24,21 +23,22 @@ struct TextFieldView: View {
     private let placeholderText: String
     private let validationRules: [TextFieldValidationRule]
     private let handleInputTextDidChangeClosure: Closure.Generic<(newValue: String, isValid: Bool)>?
+    private let isSecure: Bool
     
     init(
         inputText: Binding<String>,
-        isInputTextValid: Binding<Bool>,
         headerText: String,
         placeholderText: String,
         validationRules: [TextFieldValidationRule] = [],
-        handleInputTextDidChangeClosure: Closure.Generic<(newValue: String, isValid: Bool)>? = nil
+        handleInputTextDidChangeClosure: Closure.Generic<(newValue: String, isValid: Bool)>? = nil,
+        isSecure: Bool = false
     ) {
         self._inputText = inputText
-        self._isInputTextValid = isInputTextValid
         self.headerText = headerText
         self.placeholderText = placeholderText
         self.validationRules = validationRules
         self.handleInputTextDidChangeClosure = handleInputTextDidChangeClosure
+        self.isSecure = isSecure
     }
     
     var body: some View {
@@ -52,21 +52,22 @@ struct TextFieldView: View {
                         .lineLimit(1)
                     Spacer()
                         .frame(height: 8)
-                    ZStack(alignment: .topLeading) {
-                        Text(placeholderText)
-                            .font(.bodyPrimary)
-                            .foregroundColor(Color(.textUnaccent))
-                            .opacity(inputText.isEmpty && isFocused == false ? 1 : 0)
-                            .disabled(true)
-                            .animation(.default, value: isFocused)
-                        TextEditor(text: $inputText)
-                            .focused($isFocused)
-                            .font(.bodyPrimary)
-                            .foregroundColor(getTextColor(isError: failedRules.isEmpty == false))
-                            .tint(Color(.iconPrimary))
-                            .scrollContentBackground(.hidden)
+                    Group {
+                        if isSecure {
+                            SecureField(placeholderText, text: $inputText)
+                        } else {
+                            TextField(placeholderText, text: $inputText)
+                        }
                     }
+                    .keyboardType(.alphabet)
+                    .focused($isFocused)
+                    .font(.bodyPrimary)
+                    .foregroundColor(Color(.textPrimary))
+                    .tint(Color(.iconPrimary))
+                    .scrollContentBackground(.hidden)
                     if failedRules.isEmpty {
+                        Spacer()
+                            .frame(height: 2)
                         Color(.borderPrimary)
                             .frame(height: 1)
                     }
@@ -77,11 +78,13 @@ struct TextFieldView: View {
                         .font(.bodySmall)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(failedRules.isEmpty ? 0 : 1)
-                    if failedRules.isEmpty == false {
-                        Spacer()
-                            .frame(height: 8)
-                        Color(.borderPrimary)
-                            .frame(height: 1)
+                    Group {
+                        if failedRules.isEmpty == false {
+                            Spacer()
+                                .frame(height: 8)
+                            Color(.borderPrimary)
+                                .frame(height: 1)
+                        }
                     }
                 }
                 .animation(.default, value: failedRules.isEmpty)
@@ -91,14 +94,6 @@ struct TextFieldView: View {
             }
         }
         .frame(height: 76)
-    }
-    
-    private func getTextColor(isError: Bool) -> Color {
-        if isError || isInputTextValid == false {
-            return Color(.textAttention)
-        } else {
-            return Color(.textPrimary)
-        }
     }
     
     private func getTextValidationRules() -> [TextValidationRule] {

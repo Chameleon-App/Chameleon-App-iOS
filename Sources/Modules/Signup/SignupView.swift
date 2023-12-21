@@ -5,6 +5,7 @@
 //  Created by Ilia Chub on 21.12.2023.
 //
 
+import FormView
 import SwiftUI
 import PhotosUI
 import SwiftyCrop
@@ -56,7 +57,6 @@ struct SignupView: View {
                 Group {
                     TextFieldView(
                         inputText: $viewModel.emailInputText,
-                        isInputTextValid: $viewModel.isEmailValid,
                         headerText: String(localized: String.LocalizationValue(Constants.emailTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.emailPlaceholderTitleKey)
@@ -66,7 +66,6 @@ struct SignupView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
-                        isInputTextValid: $viewModel.isUsernameValid,
                         headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
@@ -76,23 +75,23 @@ struct SignupView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.passwordInputText,
-                        isInputTextValid: $viewModel.isPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
                         ),
                         validationRules: viewModel.getPasswordFieldValidationRules(),
-                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid },
+                        isSecure: true
                     )
                     TextFieldView(
                         inputText: $viewModel.checkPasswordInputText,
-                        isInputTextValid: $viewModel.isCheckPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.checkPasswordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.checkPasswordPlaceholderTitleKey)
                         ),
                         validationRules: [],
-                        handleInputTextDidChangeClosure: nil
+                        handleInputTextDidChangeClosure: nil,
+                        isSecure: true
                     )
                 }
                 .padding(.horizontal, 12)
