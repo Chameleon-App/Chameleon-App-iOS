@@ -11,24 +11,55 @@ final class AuthenticationRepository {
     private enum Constants {
         enum URLPath: String {
             case loginEndpoint = "/api/auth/token/"
+            case checkTokenEndpoint = "/api/auth/check_token/"
         }
         
         static let authenticationTokenUserDefaultsKey = "authenticationToken"
-        static let authenticationTokenPrefix = "Token "
+        static let authenticationHeaderPrefix = "Token "
     }
     
     private let userDefaults = UserDefaults.standard
     
-    func getIsUserAuthenticated() -> Bool {
-        return getAuthenticationToken() != nil
+    func getIsUserAuthenticated() async -> Bool {
+        guard let authenticationToken = getAuthenticationToken() else {
+            logout()
+            
+            return false
+        }
+        
+        let parameters = CheckTokenParameters(token: authenticationToken)
+        
+        let checkTokenResult: ServerClientServiceResult<
+            CheckAuthenticationTokenResultModel
+        > = await ServerClientService.shared.post(
+            endpoint: Constants.URLPath.checkTokenEndpoint.rawValue,
+            parameters: parameters
+        )
+        
+        let result: Bool
+        
+        switch checkTokenResult {
+        case .success(let successModel):
+            result = successModel.isTokenAlive
+        case .failure:
+            result = false
+        }
+        
+        if result == false {
+            logout()
+        }
+        
+        return result
     }
     
-    func getAuthenticationToken() -> String? {
-        guard let rawToken = userDefaults.string(forKey: Constants.authenticationTokenUserDefaultsKey) else {
+    func getAuthenticationHeader() async -> String? {
+        guard await getIsUserAuthenticated(), let authenticationToken = getAuthenticationToken() else {
+            logout()
+            
             return nil
         }
         
-        return Constants.authenticationTokenPrefix + rawToken
+        return Constants.authenticationHeaderPrefix + authenticationToken
     }
     
     func login(username: String, password: String) async -> ServerClientServiceResult<Void> {
@@ -56,9 +87,17 @@ final class AuthenticationRepository {
     private func saveAuthenticationToken(_ token: String) {
         userDefaults.setValue(token, forKey: Constants.authenticationTokenUserDefaultsKey)
     }
+    
+    private func getAuthenticationToken() -> String? {
+        return userDefaults.string(forKey: Constants.authenticationTokenUserDefaultsKey)
+    }
 }
 
 private struct LoginParameters: Encodable {
     let username: String
     let password: String
+}
+
+private struct CheckTokenParameters: Encodable {
+    let token: String
 }

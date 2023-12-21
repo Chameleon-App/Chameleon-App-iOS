@@ -17,22 +17,24 @@ final class LaunchViewModel: ObservableObject {
     }
     
     func handleViewDidAppear() {
-        if getIsUserAuthenticated() {
-            openMainScreen()
-        } else {
-            openLoginScreen()
+        Task {
+            if await getIsUserAuthenticated() {
+                openMainScreen()
+            } else {
+                openLoginScreen()
+            }
         }
     }
     
     private func openMainScreen() {
-        coordinator.openMainScreen()
+        Task { @MainActor in coordinator.openMainScreen() }
     }
     
     private func openLoginScreen() {
-        coordinator.openLoginScreen()
+        Task { @MainActor in coordinator.openLoginScreen() }
     }
     
-    private func getIsUserAuthenticated() -> Bool {
-        return authenticationRepository.getIsUserAuthenticated()
+    private func getIsUserAuthenticated() async -> Bool {
+        return await authenticationRepository.getIsUserAuthenticated()
     }
 }
