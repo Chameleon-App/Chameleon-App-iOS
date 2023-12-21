@@ -33,9 +33,9 @@ struct LoginSignupHeaderView: View {
                         .zIndex(0.1)
                     Spacer()
                 }
-                .padding(.top, -48)
+                .padding(.top, -58)
             }
         }
-        .frame(height: 236)
+        .frame(height: 180)
     }
 }
