@@ -51,7 +51,7 @@ class CalendarViewModel: ObservableObject {
     }
     
     func handleViewDidAppear() {
-        Task { await configurePantonesOfDayAndPhotosBydays() }
+        Task { await configurePantonesOfDayAndPhotosByDays() }
     }
     
     func handlePhotoLoadingErrorAlertButtonDidTap() {
@@ -62,7 +62,7 @@ class CalendarViewModel: ObservableObject {
         isNeedToShowSuccessPhotoLoadingSheet = false
     }
     
-    private func configurePantonesOfDayAndPhotosBydays() async {
+    private func configurePantonesOfDayAndPhotosByDays() async {
         guard let authenticationToken = await authenticationRepository.getAuthenticationHeader() else {
             return openLoginScreen()
         }
@@ -72,13 +72,13 @@ class CalendarViewModel: ObservableObject {
         
         switch await (getPantonesOfDayResult, getPhotosByDaysResult) {
         case (.success(let pantonesOfDay), .success(let photosByDays)):
-            handleSeccessResult(pantonesOfDay: pantonesOfDay, photosByDays: photosByDays)
+            handleSuccessResult(pantonesOfDay: pantonesOfDay, photosByDays: photosByDays)
         case (.failure(let error), _), (_, .failure(let error)):
             handleError(error)
         }
     }
     
-    private func handleSeccessResult(pantonesOfDay: PantonesOfDayModel, photosByDays: [PhotosOfDayModel]) {
+    private func handleSuccessResult(pantonesOfDay: PantonesOfDayModel, photosByDays: [PhotosOfDayModel]) {
         guard let pantonesOfDayViewItem = mapPantonesToTriplePantoneFeedViewItem(
             pantones: pantonesOfDay.pantones,
             isNeedDoAddNames: true
@@ -101,6 +101,7 @@ class CalendarViewModel: ObservableObject {
         let contentViewState = CalendarViewState.content(contentViewItem)
         
         updateViewState(to: contentViewState)
+        showPantonesStoriesIfNeeded(with: pantonesOfDay)
     }
     
     private func mapPhotosByDaysToCalendarContentCells(
@@ -220,7 +221,7 @@ class CalendarViewModel: ObservableObject {
             
             switch photoUploadingResult {
             case .success(let successModel):
-                await configurePantonesOfDayAndPhotosBydays()
+                await configurePantonesOfDayAndPhotosByDays()
                 Task { @MainActor in
                     self.lastLoadedPhotoPoints = successModel.points
                     self.isNeedToShowSuccessPhotoLoadingSheet = true
@@ -237,5 +238,9 @@ class CalendarViewModel: ObservableObject {
     
     private func openLoginScreen() {
         Task { @MainActor in coordinator.openLoginScreen() }
+    }
+    
+    private func showPantonesStoriesIfNeeded(with pantonesOfDay: PantonesOfDayModel) {
+        Task { @MainActor in coordinator.openPantonesStories(pantonesOfDay: pantonesOfDay) }
     }
 }
