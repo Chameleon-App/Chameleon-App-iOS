@@ -63,7 +63,7 @@ class CalendarViewModel: ObservableObject {
     }
     
     private func configurePantonesOfDayAndPhotosBydays() async {
-        guard let authenticationToken = authenticationRepository.getAuthenticationToken() else {
+        guard let authenticationToken = await authenticationRepository.getAuthenticationHeader() else {
             return openLoginScreen()
         }
         
@@ -200,17 +200,17 @@ class CalendarViewModel: ObservableObject {
     }
     
     private func handlePhotoDidCrop(image: UIImage?) {
-        guard let authenticationToken = authenticationRepository.getAuthenticationToken() else {
-            return openLoginScreen()
-        }
-        
-        guard let image, let jpegData = image.jpegData(compressionQuality: .one) else {
-            return handlePhotoLoadingError()
-        }
-        
-        Task { @MainActor in isActivityIndicatorPresented = true }
-        
         Task {
+            guard let authenticationToken = await authenticationRepository.getAuthenticationHeader() else {
+                return openLoginScreen()
+            }
+            
+            guard let image, let jpegData = image.jpegData(compressionQuality: .one) else {
+                return handlePhotoLoadingError()
+            }
+            
+            Task { @MainActor in isActivityIndicatorPresented = true }
+            
             let photoUploadingResult = await photosRepository.uploadPhoto(
                 jpegData: jpegData,
                 authenticationToken: authenticationToken

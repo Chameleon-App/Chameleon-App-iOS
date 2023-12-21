@@ -11,8 +11,11 @@ struct LaunchView: View {
     @ObservedObject var viewModel: LaunchViewModel
     
     var body: some View {
-        Color(.backgroundPrimary)
-            .edgesIgnoringSafeArea(.all)
+        VStack {
+            ProgressView()
+                .controlSize(.large)
+        }
+            .background(Color(.backgroundPrimary))
             .onAppear { viewModel.handleViewDidAppear() }
     }
 }
