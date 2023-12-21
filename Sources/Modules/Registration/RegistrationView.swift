@@ -11,7 +11,11 @@ struct RegistrationView: View {
     @ObservedObject var viewModel: RegistrationViewModel
     
     var body: some View {
-        Color.red
-            .ignoresSafeArea()
+        ScrollView {
+            VStack(spacing: 0) {
+                LoginRegistrationHeaderView()
+                    .ignoresSafeArea()
+            }
+        }
     }
 }

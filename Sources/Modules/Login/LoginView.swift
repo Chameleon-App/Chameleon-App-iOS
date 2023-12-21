@@ -70,16 +70,7 @@ struct LoginView: View {
                         }
                         .padding(.horizontal, 12)
                     }
-                    VStack {
-                        Spacer()
-                            .frame(height: 110)
-                        HStack {
-                            Image(.chameleon)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 14)
-                        Spacer()
-                    }
+                    LoginRegistrationHeaderView()
                     .alert(
                         String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
                         isPresented: $viewModel.isErrorAlertPresented,
