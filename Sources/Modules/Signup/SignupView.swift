@@ -19,6 +19,8 @@ struct SignupView: View {
         static let usernamePlaceholderTitleKey = "usernamePlaceholderTitle"
         static let passwordTitleKey = "passwordTitle"
         static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
+        static let emailTitleKey = "emailTitle"
+        static let emailPlaceholderTitleKey = "emailPlaceholderTitle"
     }
     
     @ObservedObject var viewModel: SignupViewModel
@@ -51,6 +53,18 @@ struct SignupView: View {
                 Spacer()
                     .frame(height: 16)
                 Group {
+                    TextFieldView(
+                        inputText: $viewModel.emailInputText,
+                        isInputTextValid: viewModel.isEmailValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.emailTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.emailPlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getEmailFieldValidationRules(),
+                        handleInputTextDidChangeClosure: { viewModel.isEmailValid = $0.isValid }
+                    )
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
                         isInputTextValid: viewModel.isUsernameValid,

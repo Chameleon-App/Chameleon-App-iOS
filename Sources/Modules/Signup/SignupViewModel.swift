@@ -14,6 +14,8 @@ final class SignupViewModel: ObservableObject {
         static let maxUsernameLength = 150
         static let minPasswordLength = 1
         static let maxPasswordLength = 128
+        static let minEmailLength = 1
+        static let maxEmailLength = 254
         static let maxLengthRuleTitleKey = "maxLengthRuleTitle"
         static let minLengthRuleTitleKey = "minLengthRuleTitle"
     }
@@ -25,6 +27,8 @@ final class SignupViewModel: ObservableObject {
     @Published var isUsernameValid: Bool { didSet { handleIsUsernameValidDidSet() } }
     @Published var passwordInputText: String
     @Published var isPasswordValid: Bool { didSet { handleIsPasswordValidDidSet() } }
+    @Published var emailInputText: String
+    @Published var isEmailValid: Bool { didSet { handleIsEmailValidDidSet() } }
     @Published var isSignupButtonDisabled: Bool
     
     private let coordinator: SignupCoordinator
@@ -35,6 +39,8 @@ final class SignupViewModel: ObservableObject {
         self.isUsernameValid = false
         self.passwordInputText = .empty
         self.isPasswordValid = false
+        self.emailInputText = .empty
+        self.isEmailValid = false
         self.isSignupButtonDisabled = true
         self.isNeedToShowCropScreen = false
     }
@@ -45,6 +51,24 @@ final class SignupViewModel: ObservableObject {
     
     func handleLoginTitleDidTap() {
         openLoginScreen()
+    }
+    
+    func getEmailFieldValidationRules() -> [TextFieldValidationRule] {
+        let minLengthRule = TextFieldValidationRule.minLength(
+            count: Constants.minEmailLength,
+            message: String(
+                localized: String.LocalizationValue(Constants.minLengthRuleTitleKey)
+            ) + String(Constants.minEmailLength)
+        )
+        
+        let maxLenghtRult = TextFieldValidationRule.minLength(
+            count: Constants.maxEmailLength,
+            message: String(
+                localized: String.LocalizationValue(Constants.maxLengthRuleTitleKey)
+            ) + String(Constants.maxEmailLength)
+        )
+        
+        return [minLengthRule, maxLenghtRult]
     }
     
     func getUsernameFieldValidationRules() -> [TextFieldValidationRule] {
@@ -97,6 +121,10 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleIsPasswordValidDidSet() {
+        
+    }
+    
+    private func handleIsEmailValidDidSet() {
         
     }
     
