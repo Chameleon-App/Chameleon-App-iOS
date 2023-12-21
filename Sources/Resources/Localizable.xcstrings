@@ -160,7 +160,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Email"
+            "value" : "Your email"
           }
         },
         "ru" : {
@@ -171,13 +171,30 @@
         }
       }
     },
+    "emailRuleTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email is not valid"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Электронная почта некорректна"
+          }
+        }
+      }
+    },
     "emailTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your email"
+            "value" : "Email"
           }
         },
         "ru" : {
@@ -482,14 +499,14 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Sign-up"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Зарегистророваться"
+            "value" : "Регистрация"
           }
         }
       }

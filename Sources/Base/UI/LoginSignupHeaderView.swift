@@ -25,14 +25,17 @@ struct LoginSignupHeaderView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 14)
+                .zIndex(1)
                 HStack {
                     Text(String(localized: String.LocalizationValue(titleKey)))
                         .font(.headingPrimary)
                         .padding(.horizontal, 14)
+                        .zIndex(0.1)
                     Spacer()
                 }
                 .padding(.top, -48)
             }
         }
+        .frame(height: 236)
     }
 }

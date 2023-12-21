@@ -16,7 +16,6 @@ struct LoginSignupBottomView: View {
     
     var body: some View {
         VStack {
-            Spacer()
             ButtonView(
                 styleType: .primary,
                 content: String(localized: String.LocalizationValue(buttonTitleKey)),
@@ -29,8 +28,6 @@ struct LoginSignupBottomView: View {
             Text(title)
                 .font(.bodySmall)
                 .onTapGesture(perform: handleTitleDidTapClosure)
-            Spacer()
-                .frame(height: 24)
         }
     }
 }

@@ -27,13 +27,12 @@ struct SignupView: View {
     
     var body: some View {
         ZStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    LoginSignupHeaderView(titleKey: Constants.signupTitleKey)
-                }
+            Color(.backgroundCommon)
+                .resignResponderOnTap()
+            VStack(spacing: 0) {
+                LoginSignupHeaderView(titleKey: Constants.signupTitleKey)
                 Spacer()
-                    .frame(height: 34)
-                
+                    .frame(height: 16)
                 PhotosPicker(selection: $viewModel.selectedPhotoItem, matching: .images) {
                     Group {
                         if let selectedImage = viewModel.selectedImage {
@@ -63,8 +62,6 @@ struct SignupView: View {
                         validationRules: viewModel.getEmailFieldValidationRules(),
                         handleInputTextDidChangeClosure: { viewModel.isEmailValid = $0.isValid }
                     )
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
                         isInputTextValid: viewModel.isUsernameValid,
@@ -75,8 +72,6 @@ struct SignupView: View {
                         validationRules: viewModel.getUsernameFieldValidationRules(),
                         handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
                     )
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
                     TextFieldView(
                         inputText: $viewModel.passwordInputText,
                         isInputTextValid: viewModel.isPasswordValid,
@@ -87,20 +82,23 @@ struct SignupView: View {
                         validationRules: viewModel.getPasswordFieldValidationRules(),
                         handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
                     )
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
                 }
                 .padding(.horizontal, 12)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.alphabet)
+                Spacer()
+                LoginSignupBottomView(
+                    buttonTitleKey: Constants.signupButtonTitleKey,
+                    handleButtonDidTapClosure: viewModel.handleSignupButtonDidTap,
+                    isButtonDisabled: viewModel.isSignupButtonDisabled,
+                    title: getLoginTitle(),
+                    handleTitleDidTapClosure: viewModel.handleLoginTitleDidTap
+                )
             }
-            .ignoresSafeArea()
-            LoginSignupBottomView(
-                buttonTitleKey: Constants.signupButtonTitleKey,
-                handleButtonDidTapClosure: viewModel.handleSignupButtonDidTap,
-                isButtonDisabled: viewModel.isSignupButtonDisabled,
-                title: getLoginTitle(),
-                handleTitleDidTapClosure: viewModel.handleLoginTitleDidTap
-            )
         }
+        .padding(.bottom, 32)
+        .ignoresSafeArea()
         .fullScreenCover(isPresented: $viewModel.isNeedToShowCropScreen) {
             if let selectedImage = viewModel.selectedImage {
                 SwiftyCropView(imageToCrop: selectedImage, maskShape: .circle) {

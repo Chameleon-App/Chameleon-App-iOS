@@ -12,6 +12,7 @@ enum TextFieldValidationRule {
     case minLength(count: Int, message: String)
     case maxLength(count: Int, message: String)
     case notEmpty(message: String)
+    case email(message: String)
 }
 
 struct TextFieldView: View {
@@ -43,20 +44,21 @@ struct TextFieldView: View {
     var body: some View {
         FormView(hideError: .onFocus) { validator in
             FormField(value: $inputText, rules: getTextValidationRules()) { failedRules in
-                VStack(spacing: 8) {
+                VStack(spacing: 0) {
                     Text(headerText)
                         .foregroundColor(Color(.textPrimary))
                         .font(.subheadingPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .lineLimit(1)
+                    Spacer()
+                        .frame(height: 8)
                     ZStack(alignment: .topLeading) {
-                        if isFocused == false {
-                            Text(placeholderText)
-                                .font(.bodyPrimary)
-                                .foregroundColor(Color(.textUnaccent))
-                                .opacity(inputText.isEmpty ? 1 : 0)
-                                .disabled(true)
-                        }
+                        Text(placeholderText)
+                            .font(.bodyPrimary)
+                            .foregroundColor(Color(.textUnaccent))
+                            .opacity(inputText.isEmpty && isFocused == false ? 1 : 0)
+                            .disabled(true)
+                            .animation(.default, value: isFocused)
                         TextEditor(text: $inputText)
                             .focused($isFocused)
                             .font(.bodyPrimary)
@@ -64,22 +66,31 @@ struct TextFieldView: View {
                             .tint(Color(.iconPrimary))
                             .scrollContentBackground(.hidden)
                     }
-                    if let firstErrorMessage = failedRules.first(where: { $0.message != .empty })?.message {
-                        Text(firstErrorMessage)
-                            .foregroundColor(Color(.textAttention))
-                            .font(.bodySmall)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    if failedRules.isEmpty {
+                        Color(.borderPrimary)
+                            .frame(height: 1)
                     }
-                    Color(.borderPrimary)
-                        .frame(height: 1)
+                    Spacer()
+                        .frame(height: 8)
+                    Text(failedRules.first(where: { $0.message != .empty })?.message ?? .empty)
+                        .foregroundColor(Color(.textAttention))
+                        .font(.bodySmall)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .opacity(failedRules.isEmpty ? 0 : 1)
+                    if failedRules.isEmpty == false {
+                        Spacer()
+                            .frame(height: 8)
+                        Color(.borderPrimary)
+                            .frame(height: 1)
+                    }
                 }
-                .animation(.default, value: isFocused)
-                .animation(.default, value: failedRules.isEmpty == false)
+                .animation(.default, value: failedRules.isEmpty)
                 .onChange(of: inputText) {
                     handleInputTextDidChangeClosure?((newValue: inputText, isValid: validator.validate()))
                 }
             }
         }
+        .frame(height: 76)
     }
     
     private func getTextColor(isError: Bool) -> Color {
@@ -99,6 +110,8 @@ struct TextFieldView: View {
                 return .minLength(count: count, message: message)
             case .notEmpty(let message):
                 return .notEmpty(message: message)
+            case .email(let message):
+                return .email(message: message)
             }
         }
     }

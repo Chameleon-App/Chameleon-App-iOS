@@ -18,6 +18,7 @@ final class SignupViewModel: ObservableObject {
         static let maxEmailLength = 254
         static let maxLengthRuleTitleKey = "maxLengthRuleTitle"
         static let minLengthRuleTitleKey = "minLengthRuleTitle"
+        static let emailRuleTitleKey = "emailRuleTitle"
     }
     
     @Published var isNeedToShowCropScreen: Bool
@@ -61,14 +62,18 @@ final class SignupViewModel: ObservableObject {
             ) + String(Constants.minEmailLength)
         )
         
-        let maxLenghtRult = TextFieldValidationRule.minLength(
+        let maxLenghtRult = TextFieldValidationRule.maxLength(
             count: Constants.maxEmailLength,
             message: String(
                 localized: String.LocalizationValue(Constants.maxLengthRuleTitleKey)
             ) + String(Constants.maxEmailLength)
         )
         
-        return [minLengthRule, maxLenghtRult]
+        let emailRule = TextFieldValidationRule.email(
+            message: String(localized: String.LocalizationValue(Constants.emailRuleTitleKey))
+        )
+        
+        return [minLengthRule, maxLenghtRult, emailRule]
     }
     
     func getUsernameFieldValidationRules() -> [TextFieldValidationRule] {
@@ -79,7 +84,7 @@ final class SignupViewModel: ObservableObject {
             ) + String(Constants.minUsernameLength)
         )
         
-        let maxLenghtRult = TextFieldValidationRule.minLength(
+        let maxLenghtRult = TextFieldValidationRule.maxLength(
             count: Constants.maxUsernameLength,
             message: String(
                 localized: String.LocalizationValue(Constants.maxLengthRuleTitleKey)
@@ -97,7 +102,7 @@ final class SignupViewModel: ObservableObject {
             ) + String(Constants.minUsernameLength)
         )
         
-        let maxLenghtRult = TextFieldValidationRule.minLength(
+        let maxLenghtRult = TextFieldValidationRule.maxLength(
             count: Constants.maxPasswordLength,
             message: String(
                 localized: String.LocalizationValue(Constants.maxLengthRuleTitleKey)

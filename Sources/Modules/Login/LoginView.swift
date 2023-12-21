@@ -27,50 +27,50 @@ struct LoginView: View {
     
     var body: some View {
         ZStack {
-            ScrollView {
-                VStack(alignment: .center) {
-                    LoginSignupHeaderView(titleKey: Constants.loginTitleKey)
-                    Spacer()
-                        .frame(height: 34)
-                    Group {
-                        TextFieldView(
-                            inputText: $viewModel.usernameInputText,
-                            isInputTextValid: viewModel.isUsernameValid,
-                            headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
-                            placeholderText: String(
-                                localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
-                            ),
-                            validationRules: viewModel.getTextFieldsValidationRules(),
-                            handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
-                        )
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        TextFieldView(
-                            inputText: $viewModel.passwordInputText,
-                            isInputTextValid: viewModel.isPasswordValid,
-                            headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
-                            placeholderText: String(
-                                localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
-                            ),
-                            validationRules: viewModel.getTextFieldsValidationRules(),
-                            handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
-                        )
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                    }
-                    .padding(.horizontal, 12)
+            Color(.backgroundCommon)
+                .resignResponderOnTap()
+            VStack(spacing: 0) {
+                LoginSignupHeaderView(titleKey: Constants.loginTitleKey)
+                Spacer()
+                    .frame(height: 8)
+                Group {
+                    TextFieldView(
+                        inputText: $viewModel.usernameInputText,
+                        isInputTextValid: viewModel.isUsernameValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getTextFieldsValidationRules(),
+                        handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
+                    )
+                    TextFieldView(
+                        inputText: $viewModel.passwordInputText,
+                        isInputTextValid: viewModel.isPasswordValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
+                        ),
+                        validationRules: viewModel.getTextFieldsValidationRules(),
+                        handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                    )
                 }
+                .padding(.horizontal, 12)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.alphabet)
+                Spacer()
+                LoginSignupBottomView(
+                    buttonTitleKey: Constants.loginTitleKey,
+                    handleButtonDidTapClosure: viewModel.handleLoginButtonDidTap,
+                    isButtonDisabled: viewModel.isLoginButtonDisabled,
+                    title: getSignupTitle(),
+                    handleTitleDidTapClosure: viewModel.handleSignupButtonDidTap
+                )
             }
-            .ignoresSafeArea()
-            LoginSignupBottomView(
-                buttonTitleKey: Constants.loginTitleKey,
-                handleButtonDidTapClosure: viewModel.handleLoginButtonDidTap,
-                isButtonDisabled: viewModel.isLoginButtonDisabled,
-                title: getSignupTitle(),
-                handleTitleDidTapClosure: viewModel.handleSignupButtonDidTap
-            )
         }
-        .resignResponderOnTap()
+        .padding(.bottom, 32)
+        .ignoresSafeArea()
         .alert(
             String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
             isPresented: $viewModel.isErrorAlertPresented,
