@@ -27,66 +27,37 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             ScrollView {
-                ZStack {
-                    VStack(alignment: .center) {
-                        Color(.backgroundAccent)
-                            .ignoresSafeArea()
-                            .frame(height: 180)
-                        Spacer()
-                            .frame(height: 8)
-                        HStack {
-                            Text(String(localized: String.LocalizationValue(Constants.loginTitleKey)))
-                                .font(.headingPrimary)
-                                .padding(.horizontal, 14)
-                            Spacer()
-                        }
-                        Spacer()
-                            .frame(height: 34)
-                        Group {
-                            TextFieldView(
-                                inputText: $viewModel.usernameInputText,
-                                isInputTextValid: viewModel.isUsernameValid,
-                                headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
-                                placeholderText: String(
-                                    localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
-                                ),
-                                validationRules: viewModel.getTextFieldsValidationRules(),
-                                handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
-                            )
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            TextFieldView(
-                                inputText: $viewModel.passwordInputText,
-                                isInputTextValid: viewModel.isPasswordValid,
-                                headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
-                                placeholderText: String(
-                                    localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
-                                ),
-                                validationRules: viewModel.getTextFieldsValidationRules(),
-                                handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
-                            )
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        }
-                        .padding(.horizontal, 12)
+                VStack(alignment: .center) {
+                    LoginSignupHeaderView(titleKey: Constants.loginTitleKey)
+                    Spacer()
+                        .frame(height: 34)
+                    Group {
+                        TextFieldView(
+                            inputText: $viewModel.usernameInputText,
+                            isInputTextValid: viewModel.isUsernameValid,
+                            headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
+                            placeholderText: String(
+                                localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
+                            ),
+                            validationRules: viewModel.getTextFieldsValidationRules(),
+                            handleInputTextDidChangeClosure: { viewModel.isUsernameValid = $0.isValid }
+                        )
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        TextFieldView(
+                            inputText: $viewModel.passwordInputText,
+                            isInputTextValid: viewModel.isPasswordValid,
+                            headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
+                            placeholderText: String(
+                                localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
+                            ),
+                            validationRules: viewModel.getTextFieldsValidationRules(),
+                            handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                        )
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                     }
-                    LoginSignupHeaderView()
-                    .alert(
-                        String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
-                        isPresented: $viewModel.isErrorAlertPresented,
-                        actions: {
-                            Button(
-                                String(localized: String.LocalizationValue(Constants.loginErrorButtonTitleKey)),
-                                role: .none
-                            ) {
-                                viewModel.handleLoginErrorAlertButtonDidTap()
-                            }
-                        },
-                        message: {
-                            Text(String(localized: String.LocalizationValue(Constants.loginErrorDescriptionKey)))
-                                .foregroundColor(Color(.textPrimary))
-                        }
-                    )
+                    .padding(.horizontal, 12)
                 }
             }
             .ignoresSafeArea()
@@ -99,6 +70,22 @@ struct LoginView: View {
             )
         }
         .resignResponderOnTap()
+        .alert(
+            String(localized: String.LocalizationValue(Constants.loginErrorTitleKey)),
+            isPresented: $viewModel.isErrorAlertPresented,
+            actions: {
+                Button(
+                    String(localized: String.LocalizationValue(Constants.loginErrorButtonTitleKey)),
+                    role: .none
+                ) {
+                    viewModel.handleLoginErrorAlertButtonDidTap()
+                }
+            },
+            message: {
+                Text(String(localized: String.LocalizationValue(Constants.loginErrorDescriptionKey)))
+                    .foregroundColor(Color(.textPrimary))
+            }
+        )
     }
     
     private func getSignupTitle() -> AttributedString {

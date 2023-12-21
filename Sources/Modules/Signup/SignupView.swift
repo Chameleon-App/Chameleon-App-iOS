@@ -9,8 +9,9 @@ import SwiftUI
 
 struct SignupView: View {
     private enum Constants {
-        static let signupTitleKey = "signupScreenLoginTitle"
-        static let signupColoredPartTitleKey = "signupScreenLoginColoredPartTitle"
+        static let signupTitleKey = "signupTitle"
+        static let loginTitleKey = "signupScreenLoginTitle"
+        static let loginColoredPartTitleKey = "signupScreenLoginColoredPartTitle"
         static let signupButtonTitleKey = "signupButtonTitle"
     }
     
@@ -20,7 +21,7 @@ struct SignupView: View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    LoginSignupHeaderView()
+                    LoginSignupHeaderView(titleKey: Constants.signupTitleKey)
                 }
             }
             .ignoresSafeArea()
@@ -35,12 +36,12 @@ struct SignupView: View {
     }
     
     private func getLoginTitle() -> AttributedString {
-        let string = String(localized: String.LocalizationValue(Constants.signupTitleKey))
+        let string = String(localized: String.LocalizationValue(Constants.loginTitleKey))
         var attributedString = AttributedString(string)
         
         attributedString.foregroundColor = Color(.textUnaccent)
         
-        let coloredPart = String(localized: String.LocalizationValue(Constants.signupColoredPartTitleKey))
+        let coloredPart = String(localized: String.LocalizationValue(Constants.loginColoredPartTitleKey))
         if let range = attributedString.range(of: coloredPart) {
             attributedString[range].foregroundColor = Color(.textLink)
         }

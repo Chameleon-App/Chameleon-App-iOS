@@ -426,6 +426,23 @@
         }
       }
     },
+    "signupTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign-up"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Зарегистророваться"
+          }
+        }
+      }
+    },
     "todayTitle" : {
       "extractionState" : "manual",
       "localizations" : {
