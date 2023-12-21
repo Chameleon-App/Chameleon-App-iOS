@@ -56,7 +56,7 @@ struct SignupView: View {
                 Group {
                     TextFieldView(
                         inputText: $viewModel.emailInputText,
-                        isInputTextValid: viewModel.isEmailValid,
+                        isInputTextValid: $viewModel.isEmailValid,
                         headerText: String(localized: String.LocalizationValue(Constants.emailTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.emailPlaceholderTitleKey)
@@ -66,7 +66,7 @@ struct SignupView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
-                        isInputTextValid: viewModel.isUsernameValid,
+                        isInputTextValid: $viewModel.isUsernameValid,
                         headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
@@ -76,7 +76,7 @@ struct SignupView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.passwordInputText,
-                        isInputTextValid: viewModel.isPasswordValid,
+                        isInputTextValid: $viewModel.isPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)
@@ -86,7 +86,7 @@ struct SignupView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.checkPasswordInputText,
-                        isInputTextValid: viewModel.isCheckPasswordValid,
+                        isInputTextValid: $viewModel.isCheckPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.checkPasswordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.checkPasswordPlaceholderTitleKey)

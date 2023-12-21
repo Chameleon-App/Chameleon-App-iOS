@@ -26,11 +26,11 @@ final class SignupViewModel: ObservableObject {
     @Published var selectedImage: UIImage?
     @Published var usernameInputText: String
     @Published var isUsernameValid: Bool { didSet { handleIsUsernameValidDidSet() } }
-    @Published var passwordInputText: String
+    @Published var passwordInputText: String { didSet { handlePasswordDidSet() } }
     @Published var isPasswordValid: Bool { didSet { handleIsPasswordValidDidSet() } }
     @Published var emailInputText: String
     @Published var isEmailValid: Bool { didSet { handleIsEmailValidDidSet() } }
-    @Published var checkPasswordInputText: String
+    @Published var checkPasswordInputText: String { didSet { handlePasswordDidSet() } }
     @Published var isCheckPasswordValid: Bool { didSet { handleIsCheckPasswordValidDidSet() } }
     @Published var isSignupButtonDisabled: Bool
     
@@ -126,19 +126,32 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleIsUsernameValidDidSet() {
-        
+        setIsSignupButtonDisabled()
     }
     
     private func handleIsPasswordValidDidSet() {
-        
+        setIsSignupButtonDisabled()
     }
     
     private func handleIsEmailValidDidSet() {
-        
+        setIsSignupButtonDisabled()
     }
     
     private func handleIsCheckPasswordValidDidSet() {
-        
+        setIsSignupButtonDisabled()
+    }
+    
+    private func setIsSignupButtonDisabled() {
+        self.isSignupButtonDisabled = (
+            isEmailValid
+            && isUsernameValid
+            && isPasswordValid
+            && isCheckPasswordValid
+        ) == false
+    }
+    
+    private func handlePasswordDidSet() {
+        isCheckPasswordValid = passwordInputText == checkPasswordInputText
     }
     
     private func handleSelectedPhotoItemDidSet() {

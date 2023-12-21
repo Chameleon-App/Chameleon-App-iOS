@@ -32,11 +32,11 @@ struct LoginView: View {
             VStack(spacing: 0) {
                 LoginSignupHeaderView(titleKey: Constants.loginTitleKey)
                 Spacer()
-                    .frame(height: 8)
+                    .frame(height: 16)
                 Group {
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
-                        isInputTextValid: viewModel.isUsernameValid,
+                        isInputTextValid: $viewModel.isUsernameValid,
                         headerText: String(localized: String.LocalizationValue(Constants.usernameTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.usernamePlaceholderTitleKey)
@@ -46,7 +46,7 @@ struct LoginView: View {
                     )
                     TextFieldView(
                         inputText: $viewModel.passwordInputText,
-                        isInputTextValid: viewModel.isPasswordValid,
+                        isInputTextValid: $viewModel.isPasswordValid,
                         headerText: String(localized: String.LocalizationValue(Constants.passwordTitleKey)),
                         placeholderText: String(
                             localized: String.LocalizationValue(Constants.passwordPlaceholderTitleKey)

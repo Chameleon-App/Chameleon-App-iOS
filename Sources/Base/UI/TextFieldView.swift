@@ -16,7 +16,7 @@ enum TextFieldValidationRule {
 }
 
 struct TextFieldView: View {
-    @State private var isInputTextValid: Bool
+    @Binding private var isInputTextValid: Bool
     @Binding private var inputText: String
     @FocusState private var isFocused: Bool
     
@@ -27,14 +27,14 @@ struct TextFieldView: View {
     
     init(
         inputText: Binding<String>,
-        isInputTextValid: Bool = true,
+        isInputTextValid: Binding<Bool>,
         headerText: String,
         placeholderText: String,
         validationRules: [TextFieldValidationRule] = [],
         handleInputTextDidChangeClosure: Closure.Generic<(newValue: String, isValid: Bool)>? = nil
     ) {
         self._inputText = inputText
-        self.isInputTextValid = isInputTextValid
+        self._isInputTextValid = isInputTextValid
         self.headerText = headerText
         self.placeholderText = placeholderText
         self.validationRules = validationRules
@@ -94,7 +94,7 @@ struct TextFieldView: View {
     }
     
     private func getTextColor(isError: Bool) -> Color {
-        if isError {
+        if isError || isInputTextValid == false {
             return Color(.textAttention)
         } else {
             return Color(.textPrimary)
