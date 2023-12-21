@@ -30,6 +30,8 @@ final class SignupViewModel: ObservableObject {
     @Published var isPasswordValid: Bool { didSet { handleIsPasswordValidDidSet() } }
     @Published var emailInputText: String
     @Published var isEmailValid: Bool { didSet { handleIsEmailValidDidSet() } }
+    @Published var checkPasswordInputText: String
+    @Published var isCheckPasswordValid: Bool { didSet { handleIsCheckPasswordValidDidSet() } }
     @Published var isSignupButtonDisabled: Bool
     
     private let coordinator: SignupCoordinator
@@ -44,6 +46,8 @@ final class SignupViewModel: ObservableObject {
         self.isEmailValid = false
         self.isSignupButtonDisabled = true
         self.isNeedToShowCropScreen = false
+        self.checkPasswordInputText = .empty
+        self.isCheckPasswordValid = false
     }
     
     func handleSignupButtonDidTap() {
@@ -130,6 +134,10 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleIsEmailValidDidSet() {
+        
+    }
+    
+    private func handleIsCheckPasswordValidDidSet() {
         
     }
     

@@ -21,6 +21,8 @@ struct SignupView: View {
         static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
         static let emailTitleKey = "emailTitle"
         static let emailPlaceholderTitleKey = "emailPlaceholderTitle"
+        static let checkPasswordTitleKey = "checkPasswordTitle"
+        static let checkPasswordPlaceholderTitleKey = "checkPasswordPlaceholderTitle"
     }
     
     @ObservedObject var viewModel: SignupViewModel
@@ -81,6 +83,16 @@ struct SignupView: View {
                         ),
                         validationRules: viewModel.getPasswordFieldValidationRules(),
                         handleInputTextDidChangeClosure: { viewModel.isPasswordValid = $0.isValid }
+                    )
+                    TextFieldView(
+                        inputText: $viewModel.checkPasswordInputText,
+                        isInputTextValid: viewModel.isCheckPasswordValid,
+                        headerText: String(localized: String.LocalizationValue(Constants.checkPasswordTitleKey)),
+                        placeholderText: String(
+                            localized: String.LocalizationValue(Constants.checkPasswordPlaceholderTitleKey)
+                        ),
+                        validationRules: [],
+                        handleInputTextDidChangeClosure: nil
                     )
                 }
                 .padding(.horizontal, 12)
