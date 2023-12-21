@@ -24,6 +24,9 @@ struct SignupView: View {
         static let emailPlaceholderTitleKey = "emailPlaceholderTitle"
         static let checkPasswordTitleKey = "checkPasswordTitle"
         static let checkPasswordPlaceholderTitleKey = "checkPasswordPlaceholderTitle"
+        static let signupErrorTitleKey = "defaultErrorTitle"
+        static let signupErrorButtonTitleKey = "defaultErrorButtonTitle"
+        static let signupErrorDescriptionKey = "defaultErrorDescription"
     }
     
     @ObservedObject var viewModel: SignupViewModel
@@ -118,6 +121,22 @@ struct SignupView: View {
             }
         }
         .animation(.default, value: viewModel.selectedImage)
+        .alert(
+            String(localized: String.LocalizationValue(Constants.signupErrorTitleKey)),
+            isPresented: $viewModel.isErrorAlertPresented,
+            actions: {
+                Button(
+                    String(localized: String.LocalizationValue(Constants.signupButtonTitleKey)),
+                    role: .none
+                ) {
+                    viewModel.handleLoginErrorAlertButtonDidTap()
+                }
+            },
+            message: {
+                Text(String(localized: String.LocalizationValue(Constants.signupErrorDescriptionKey)))
+                    .foregroundColor(Color(.textPrimary))
+            }
+        )
     }
     
     private func getLoginTitle() -> AttributedString {

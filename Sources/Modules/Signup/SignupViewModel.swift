@@ -33,6 +33,7 @@ final class SignupViewModel: ObservableObject {
     @Published var checkPasswordInputText: String { didSet { handlePasswordDidSet() } }
     @Published var isCheckPasswordValid: Bool { didSet { handleIsCheckPasswordValidDidSet() } }
     @Published var isSignupButtonDisabled: Bool
+    @Published var isErrorAlertPresented: Bool
     
     private let coordinator: SignupCoordinator
     
@@ -48,6 +49,7 @@ final class SignupViewModel: ObservableObject {
         self.isNeedToShowCropScreen = false
         self.checkPasswordInputText = .empty
         self.isCheckPasswordValid = false
+        self.isErrorAlertPresented = false
     }
     
     func handleSignupButtonDidTap() {
@@ -121,6 +123,10 @@ final class SignupViewModel: ObservableObject {
         selectedImage = image
     }
     
+    func handleLoginErrorAlertButtonDidTap() {
+        isErrorAlertPresented = false
+    }
+    
     private func openLoginScreen() {
         Task { @MainActor in coordinator.openLoginScreen() }
     }
@@ -172,6 +178,6 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleError() {
-        
+        isErrorAlertPresented = true
     }
 }
