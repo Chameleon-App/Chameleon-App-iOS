@@ -10,6 +10,7 @@ import Foundation
 final class DateService {
     enum Constants {
         static let backendDateFormat = "yyyy-MM-dd"
+        static let todayTitleKey = "todayTitle"
     }
     
     enum DateFormats {
@@ -17,19 +18,21 @@ final class DateService {
         case custom(format: String)
     }
     
-    static func getFormattedDate(date: Date, format: DateFormats) -> String? {
+    static func getIsToday(date: Date) -> Bool {
+        return Calendar.current.isDateInToday(date)
+    }
+    
+    static func getFormattedDate(date: Date, format: DateFormats, isNeedToFormatToday: Bool = false) -> String? {
+        if getIsToday(date: date) {
+            return String(localized: String.LocalizationValue(Constants.todayTitleKey))
+        }
+        
         switch format {
         case .monthAndDate:
             return getCustomDate(date: date, format: "MMM. dd")
         case .custom(let format):
             return getCustomDate(date: date, format: format)
         }
-    }
-    
-    static func getFormattedDate(timeInterval: TimeInterval, format: DateFormats) -> String? {
-        let date = Date(timeIntervalSince1970: timeInterval)
-        
-        return getFormattedDate(date: date, format: format)
     }
     
     static private func getCustomDate(date: Date, format: String) -> String? {

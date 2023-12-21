@@ -101,19 +101,27 @@ class CalendarViewModel: ObservableObject {
         let sortedPhotosByDats = photosByDays.sorted(by: { $0.date > $1.date })
         
         return sortedPhotosByDats.compactMap {
-            guard let dateString = DateService.getFormattedDate(date: $0.date, format: .monthAndDate) else {
+            guard let dateString = DateService.getFormattedDate(
+                date: $0.date,
+                format: .monthAndDate,
+                isNeedToFormatToday: true
+            ) else {
                 return nil
             }
             
+            let isToday = DateService.getIsToday(date: $0.date)
+            let triplePantoneFeed = isToday
+            ? nil
+            : mapPantonesToTriplePantoneFeedViewItem(
+                pantones: $0.pantones,
+                isNeedDoAddNames: false
+            )
+            let photos = $0.photos.map { mapPhotoToEvaluationFeedImage($0) }
+            
             return CalendarContentCellViewItem(
                 dateString: dateString,
-                triplePantoneFeed: mapPantonesToTriplePantoneFeedViewItem(
-                    pantones: $0.pantones,
-                    isNeedDoAddNames: false
-                ),
-                photos: $0.photos.map {
-                    mapPhotoToEvaluationFeedImage($0)
-                }
+                triplePantoneFeed: triplePantoneFeed,
+                photos: photos
             )
         }
     }

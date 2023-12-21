@@ -341,6 +341,23 @@
         }
       }
     },
+    "todayTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сегодня"
+          }
+        }
+      }
+    },
     "usernamePlaceholderTitle" : {
       "extractionState" : "manual",
       "localizations" : {
