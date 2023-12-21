@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 final class SignupViewModel: ObservableObject {
     private enum Constants {
@@ -17,6 +18,9 @@ final class SignupViewModel: ObservableObject {
         static let minLengthRuleTitleKey = "minLengthRuleTitle"
     }
     
+    @Published var isNeedToShowCropScreen: Bool
+    @Published var selectedPhotoItem: PhotosPickerItem? { didSet { handleSelectedPhotoItemDidSet() } }
+    @Published var selectedImage: UIImage?
     @Published var usernameInputText: String
     @Published var isUsernameValid: Bool { didSet { handleIsUsernameValidDidSet() } }
     @Published var passwordInputText: String
@@ -32,6 +36,7 @@ final class SignupViewModel: ObservableObject {
         self.passwordInputText = .empty
         self.isPasswordValid = false
         self.isSignupButtonDisabled = true
+        self.isNeedToShowCropScreen = false
     }
     
     func handleSignupButtonDidTap() {
@@ -78,6 +83,11 @@ final class SignupViewModel: ObservableObject {
         return [minLengthRule, maxLenghtRult]
     }
     
+    func handleImageDidCrop(_ image: UIImage?) {
+        isNeedToShowCropScreen = false
+        selectedImage = image
+    }
+    
     private func openLoginScreen() {
         Task { @MainActor in coordinator.openLoginScreen() }
     }
@@ -87,6 +97,27 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleIsPasswordValidDidSet() {
+        
+    }
+    
+    private func handleSelectedPhotoItemDidSet() {
+        Task {
+            guard
+                let imageData = try? await selectedPhotoItem?.loadTransferable(type: Data.self),
+                let image = UIImage(data: imageData)
+            else {
+                return handleError()
+            }
+            
+            Task { @MainActor in
+                self.selectedPhotoItem = nil
+                self.selectedImage = image
+                self.isNeedToShowCropScreen = true
+            }
+        }
+    }
+    
+    private func handleError() {
         
     }
 }

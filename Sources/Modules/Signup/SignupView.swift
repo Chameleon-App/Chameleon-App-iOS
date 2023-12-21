@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PhotosUI
+import SwiftyCrop
 
 struct SignupView: View {
     private enum Constants {
@@ -29,6 +31,25 @@ struct SignupView: View {
                 }
                 Spacer()
                     .frame(height: 34)
+                
+                PhotosPicker(selection: $viewModel.selectedPhotoItem, matching: .images) {
+                    Group {
+                        if let selectedImage = viewModel.selectedImage {
+                            Image(uiImage: selectedImage)
+                                .resizable()
+                        } else {
+                            ZStack {
+                                Color(.backgroundAccent)
+                                Image(.ic32CameraFit)
+                            }
+                        }
+                    }
+                    .frame(width: 125, height: 125)
+                    .cornerRadius(.infinity)
+                }
+                .photosPickerDisabledCapabilities(.collectionNavigation)
+                Spacer()
+                    .frame(height: 16)
                 Group {
                     TextFieldView(
                         inputText: $viewModel.usernameInputText,
@@ -66,6 +87,14 @@ struct SignupView: View {
                 handleTitleDidTapClosure: viewModel.handleLoginTitleDidTap
             )
         }
+        .fullScreenCover(isPresented: $viewModel.isNeedToShowCropScreen) {
+            if let selectedImage = viewModel.selectedImage {
+                SwiftyCropView(imageToCrop: selectedImage, maskShape: .circle) {
+                    viewModel.handleImageDidCrop($0)
+                }
+            }
+        }
+        .animation(.default, value: viewModel.selectedImage)
     }
     
     private func getLoginTitle() -> AttributedString {
