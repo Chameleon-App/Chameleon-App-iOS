@@ -28,7 +28,7 @@ struct StoriesView: View {
                     notFilledProgressColor: notFilledProgressColor,
                     onCloseButtonTapAction: viewModel.handleStoriesClose
                 )
-                .padding(.top, 12)
+                .padding(.top, 92)
                 .padding(.horizontal, 28)
             }
             .onDragGestureTranslation { viewModel.handleDragGesture(with: $0.width) }
@@ -72,6 +72,9 @@ private struct StoriesHeaderView: View {
             )
             
             Image(.ic16Close)
+                .padding(4)
+                .foregroundColor(filledProgressColor)
+                .background { Color(.iconSecondary).cornerRadius(10) }
                 .onTapGesture(perform: onCloseButtonTapAction)
         }
     }
@@ -94,6 +97,8 @@ private struct StoriesProgressBarView: View {
                 )
             }
         }
+        .padding(8)
+        .background { Color(.iconSecondary).cornerRadius(10) }
     }
     
     private func getProgress(for storyNumber: Int) -> Double {

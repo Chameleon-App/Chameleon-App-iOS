@@ -7,4 +7,8 @@
 
 final class PantonesStoriesCoordinator {
     weak var router: PresentationRouter?
+    
+    func dismiss() {
+        router?.dismiss()
+    }
 }

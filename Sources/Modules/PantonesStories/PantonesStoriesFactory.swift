@@ -6,9 +6,9 @@
 //
 
 enum PantonesStoriesFactory {
-    static func createPantonesStoriesController() -> PantonesStoriesController {
+    static func createPantonesStoriesController(pantonesOfDay: PantonesOfDayModel) -> PantonesStoriesController {
         let coordinator = PantonesStoriesCoordinator()
-        let viewModel = PantonesStoriesViewModel(coordinator: coordinator)
+        let viewModel = PantonesStoriesViewModel(coordinator: coordinator, pantonesOfDay: pantonesOfDay)
         let controller = PantonesStoriesController(viewModel: viewModel)
         coordinator.router = controller
         

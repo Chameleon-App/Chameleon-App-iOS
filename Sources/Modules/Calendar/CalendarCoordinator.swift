@@ -15,7 +15,7 @@ final class CalendarCoordinator {
     }
     
     func openPantonesStories(pantonesOfDay: PantonesOfDayModel) {
-        let viewController = PantonesStoriesFactory.createPantonesStoriesController()
+        let viewController = PantonesStoriesFactory.createPantonesStoriesController(pantonesOfDay: pantonesOfDay)
         viewController.modalPresentationStyle = .fullScreen
         
         router?.present(controller: viewController, completion: nil)

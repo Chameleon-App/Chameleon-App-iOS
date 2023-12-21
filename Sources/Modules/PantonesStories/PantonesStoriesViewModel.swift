@@ -7,10 +7,21 @@
 
 import Foundation
 
-final class PantonesStoriesViewModel: ObservableObject {
+final class PantonesStoriesViewModel: BaseStoriesViewModel {
+    let pantonesOfDay: PantonesOfDayModel
+    
     private let coordinator: PantonesStoriesCoordinator
     
-    init(coordinator: PantonesStoriesCoordinator) {
+    init(coordinator: PantonesStoriesCoordinator, pantonesOfDay: PantonesOfDayModel) {
         self.coordinator = coordinator
+        self.pantonesOfDay = pantonesOfDay
+        
+        super.init(storiesService: StoriesService())
+    }
+    
+    override func handleStoriesClose() {
+        super.handleStoriesClose()
+        
+        coordinator.dismiss()
     }
 }
