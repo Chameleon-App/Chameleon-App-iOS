@@ -98,11 +98,10 @@ class CalendarViewModel: ObservableObject {
     private func mapPhotosByDaysToCalendarContentCells(
         _ photosByDays: [PhotosOfDayModel]
     ) -> [CalendarContentCellViewItem] {
-        return photosByDays.compactMap {
-            guard
-                let date = $0.photos.first?.date,
-                let dateString = DateService.getFormattedDate(date: date, format: .monthAndDate)
-            else {
+        let sortedPhotosByDats = photosByDays.sorted(by: { $0.date > $1.date })
+        
+        return sortedPhotosByDats.compactMap {
+            guard let dateString = DateService.getFormattedDate(date: $0.date, format: .monthAndDate) else {
                 return nil
             }
             
