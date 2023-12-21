@@ -22,6 +22,10 @@ final class SignupViewModel: ObservableObject {
     }
     
     func handleLoginTitleDidTap() {
-        
+        openLoginScreen()
+    }
+    
+    private func openLoginScreen() {
+        Task { @MainActor in coordinator.openLoginScreen() }
     }
 }
