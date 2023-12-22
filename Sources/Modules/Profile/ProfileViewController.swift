@@ -8,6 +8,9 @@
 import UIKit
 
 final class ProfileViewController: BaseHostingController<ProfileView> {
+    
+    override var isNavigationBarHidden: Bool { true }
+
     init(viewModel: ProfileViewModel) {
         super.init(rootView: ProfileView(viewModel: viewModel))
     }
