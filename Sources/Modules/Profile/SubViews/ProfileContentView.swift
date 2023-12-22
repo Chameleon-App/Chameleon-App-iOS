@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfileContentView: View {
     private enum Constants {
         static let gridBottomPadding: CGFloat = 20
-        static let horizontalPadding: CGFloat = 25
+        static let horizontalPadding: CGFloat = 1
     }
 
     let viewModel: ProfileViewModel

@@ -13,6 +13,7 @@ struct ProfileLoadingView: View {
         VStack {
             ProfileHeaderView(viewModel: viewModel)
             ProgressView()
+            Spacer()
         }
     }
 }

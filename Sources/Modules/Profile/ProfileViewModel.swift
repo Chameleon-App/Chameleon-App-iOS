@@ -64,6 +64,10 @@ final class ProfileViewModel: ObservableObject {
         }
     }
 
+    func handleViewDidAppear() {
+        Task { configureUserInterface() }
+    }
+
     private func getUser(authenticationHeader: String) async -> ServerClientServiceResult<UserModel> {
         return await userRepository.getUser(authenticationHeader: authenticationHeader)
     }

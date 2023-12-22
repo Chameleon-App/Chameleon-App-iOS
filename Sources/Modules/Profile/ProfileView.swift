@@ -16,6 +16,7 @@ struct ProfileView: View {
             ProfileLoadingView(viewModel: viewModel)
         case .content:
             ProfileContentView(viewModel: viewModel)
+                .onAppear { viewModel.handleViewDidAppear() }
         case .error:
             ProfileErrorView()
         }
