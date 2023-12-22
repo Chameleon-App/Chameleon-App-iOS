@@ -296,6 +296,7 @@ private struct CalendarAddPhotoView: View {
                 }
             }
         }
+        .animation(.default, value: isCropViewPresented)
     }
 }
 

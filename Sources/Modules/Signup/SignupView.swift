@@ -127,7 +127,7 @@ struct SignupView: View {
             isPresented: $viewModel.isErrorAlertPresented,
             actions: {
                 Button(
-                    String(localized: String.LocalizationValue(Constants.signupButtonTitleKey)),
+                    String(localized: String.LocalizationValue(Constants.signupErrorButtonTitleKey)),
                     role: .none
                 ) {
                     viewModel.handleLoginErrorAlertButtonDidTap()

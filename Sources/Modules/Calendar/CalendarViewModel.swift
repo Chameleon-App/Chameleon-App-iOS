@@ -11,6 +11,7 @@ import PhotosUI
 class CalendarViewModel: ObservableObject {
     private enum Constants {
         static let defaultPantoneTitleKey = "defaultPantoneTitle"
+        static let showPantonesStoriesDelay: UInt64 = 1_000_000_000
     }
     
     @Published var isPhotoLoadingErrorAlertPresented: Bool
@@ -101,7 +102,11 @@ class CalendarViewModel: ObservableObject {
         let contentViewState = CalendarViewState.content(contentViewItem)
         
         updateViewState(to: contentViewState)
-        showPantonesStoriesIfNeeded(with: pantonesOfDay)
+        
+        Task {
+            try await Task.sleep(nanoseconds: Constants.showPantonesStoriesDelay)
+            showPantonesStoriesIfNeeded(with: pantonesOfDay)
+        }
     }
     
     private func mapPhotosByDaysToCalendarContentCells(
