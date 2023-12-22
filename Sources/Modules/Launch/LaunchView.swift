@@ -15,7 +15,7 @@ struct LaunchView: View {
             ProgressView()
                 .controlSize(.large)
         }
-            .background(Color(.backgroundPrimary))
+            .background(Color(.backgroundCommon))
             .onAppear { viewModel.handleViewDidAppear() }
     }
 }
