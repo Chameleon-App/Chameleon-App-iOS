@@ -12,7 +12,7 @@ final class ProfileFactory {
         let viewController = ProfileViewController(viewModel: viewModel)
 
         coordinator.router = viewController
-        
+
         return viewController
     }
 }

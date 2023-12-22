@@ -9,9 +9,16 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var viewModel: ProfileViewModel
-    
+
     var body: some View {
-        Color.blue
-            .ignoresSafeArea()
+        switch viewModel.viewState {
+        case .loading:
+            ProfileLoadingView(viewModel: viewModel)
+        case .content:
+            ProfileContentView(viewModel: viewModel)
+                .onAppear { viewModel.handleViewDidAppear() }
+        case .error:
+            ProfileErrorView()
+        }
     }
 }
