@@ -11,7 +11,7 @@ private enum Constants {
     enum Layout {
         static let horizonalPadding: CGFloat = 10
         static let verticalPadding: CGFloat = 25
-        static let statisticSpacing: CGFloat = 60
+        static let statisticSpacing: CGFloat = 40
         static let statisticsHeight: CGFloat = 19
         static let profilePhotoSize: CGFloat = 75
     }
@@ -52,7 +52,7 @@ struct ProfileHeaderView: View {
     let viewModel: ProfileViewModel
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(alignment: .top, spacing: 10) {
             AsyncImageView(url: viewModel.profilePhoto, rounding: .max)
                 .frame(width: Constants.Layout.profilePhotoSize, height: Constants.Layout.profilePhotoSize)
             VStack(alignment: .leading, spacing: 7) {

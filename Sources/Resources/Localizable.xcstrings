@@ -426,6 +426,23 @@
         }
       }
     },
+    "photos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фотографии"
+          }
+        }
+      }
+    },
     "profileTabTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -439,6 +456,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Профиль"
+          }
+        }
+      }
+    },
+    "rating" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рейтинг"
           }
         }
       }
@@ -575,6 +609,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Регистрация"
+          }
+        }
+      }
+    },
+    "streak" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streak"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Серия"
           }
         }
       }
