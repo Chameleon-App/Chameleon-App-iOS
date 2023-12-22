@@ -244,7 +244,7 @@ class CalendarViewModel: ObservableObject {
         let lastShowDate = pantonesRepository.lastShowDate
         
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+        calendar.timeZone = TimeZone(secondsFromGMT: .zero) ?? .gmt
         
         let currentDay = calendar.startOfDay(for: Date())
         let lastShowDay = calendar.startOfDay(for: lastShowDate)

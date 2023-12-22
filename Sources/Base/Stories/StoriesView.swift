@@ -18,7 +18,7 @@ struct StoriesView: View {
     var body: some View {
         stories[viewModel.currentStoryNumber]
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            // модификатор contentShape нужен, чтобы корректно отрабатывал gesture по всей площади
+            // contentShape modifier is needed for gesture to work correctly over the entire area
             .contentShape(Rectangle())
             .overlay(alignment: .top) {
                 StoriesHeaderView(
@@ -67,7 +67,6 @@ private struct StoriesHeaderView: View {
             Image(.ic16Close)
                 .foregroundColor(filledProgressColor)
                 .onTapGesture(perform: onCloseButtonTapAction)
-            
             StoriesProgressBarView(
                 progress: progress,
                 storiesCount: storiesCount,
@@ -114,7 +113,6 @@ private struct StoryProgressView: View {
                 Rectangle()
                     .foregroundColor(notFilledProgressColor)
                     .cornerRadius(4)
-                
                 Rectangle()
                     .frame(width: proxy.size.width * progress, alignment: .leading)
                     .foregroundColor(filledProgressColor)

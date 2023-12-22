@@ -35,7 +35,7 @@ final class PantonesStoriesViewModel: ObservableObject {
     
     func handleDragGesture(with width: CGFloat) {
         if abs(width) > Constants.minDragWidthToSwipe {
-            let direction: ProgressMovingDirection = width < 0 ? .forward : .backward
+            let direction: ProgressMovingDirection = width < .zero ? .forward : .backward
             
             storiesService.moveProgress(direction: direction)
         }

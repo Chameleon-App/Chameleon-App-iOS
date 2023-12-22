@@ -15,7 +15,6 @@ struct PantoneCardView: View {
         VStack(spacing: 0) {
             Rectangle()
                 .strokeBorder(Color(.backgroundCommon), lineWidth: 10)
-            
             CardSignatureView(name: name, number: number)
         }
     }
@@ -30,15 +29,12 @@ private struct CardSignatureView: View {
             Rectangle()
                 .frame(height: 150)
                 .foregroundColor(Color(.backgroundCommon))
-            
             VStack(alignment: .leading, spacing: 0) {
                 PantoneLogoView()
                     .padding(.bottom, 10)
-                
                 Text(number.uppercased())
                     .font(.pantoneSubtitle)
                     .padding(.bottom, 6)
-                
                 Text(name.capitalized)
                     .font(.pantoneSubtitle)
             }

@@ -35,21 +35,3 @@ private struct PantoneStoryView: View {
         }
     }
 }
-
-struct PantonesStoriesView_Previews: PreviewProvider {
-    static let pantonesOfDay = PantonesOfDayModel(
-        pantones: [
-            PantoneModel(name: "Закат", number: "Малиновый", hex: "#EF9CDA"),
-            PantoneModel(name: "По стене", number: "Стекает", hex: "#32CBFF")
-        ]
-    )
-    
-    static var previews: some View {
-        PantonesStoriesView(
-            viewModel: PantonesStoriesViewModel(
-                coordinator: PantonesStoriesCoordinator(), 
-                pantonesOfDay: pantonesOfDay
-            )
-        )
-    }
-}
