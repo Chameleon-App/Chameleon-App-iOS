@@ -375,6 +375,23 @@
         }
       }
     },
+    "pantoneTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PANTONE"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PANTONE"
+          }
+        }
+      }
+    },
     "passwordPlaceholderTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -409,23 +426,6 @@
         }
       }
     },
-    "photos" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Photos"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Фотографий"
-          }
-        }
-      }
-    },
     "profileTabTitle" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -443,19 +443,19 @@
         }
       }
     },
-    "rating" : {
+    "registeredSymbol" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rating"
+            "state" : "needs_review",
+            "value" : "®"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Рейтинг"
+            "value" : "®"
           }
         }
       }
@@ -575,23 +575,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Регистрация"
-          }
-        }
-      }
-    },
-    "streak" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Streak"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Серия"
           }
         }
       }
