@@ -241,6 +241,19 @@ class CalendarViewModel: ObservableObject {
     }
     
     private func showPantonesStoriesIfNeeded(with pantonesOfDay: PantonesOfDayModel) {
-        Task { @MainActor in coordinator.openPantonesStories(pantonesOfDay: pantonesOfDay) }
+        let lastShowDate = pantonesRepository.lastShowDate
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
+        
+        let currentDay = calendar.startOfDay(for: Date())
+        let lastShowDay = calendar.startOfDay(for: lastShowDate)
+        
+        if currentDay > lastShowDay {
+            Task { @MainActor in
+                coordinator.openPantonesStories(pantonesOfDay: pantonesOfDay)
+                pantonesRepository.lastShowDate = Date()
+            }
+        }
     }
 }
