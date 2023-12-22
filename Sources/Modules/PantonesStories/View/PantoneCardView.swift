@@ -39,7 +39,7 @@ private struct CardSignatureView: View {
                     .font(.pantoneSubtitle)
                     .padding(.bottom, 6)
                 
-                Text(name)
+                Text(name.capitalized)
                     .font(.pantoneSubtitle)
             }
             .padding(.horizontal, 10)

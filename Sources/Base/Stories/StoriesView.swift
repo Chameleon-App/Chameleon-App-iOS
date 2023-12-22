@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StoriesView: View {
-    @ObservedObject var viewModel: BaseStoriesViewModel
+    @ObservedObject var viewModel: PantonesStoriesViewModel
     
     private let stories: [AnyView]
     private let filledProgressColor: Color
@@ -39,7 +39,7 @@ struct StoriesView: View {
     
     init<Data: RandomAccessCollection, Content: View>(
         _ data: Data,
-        viewModel: BaseStoriesViewModel,
+        viewModel: PantonesStoriesViewModel,
         filledProgressColor: Color,
         notFilledProgressColor: Color,
         changeStoryAnimation: Animation? = nil,
@@ -124,20 +124,5 @@ private struct StoryProgressView: View {
             }
         }
         .frame(height: 4)
-    }
-}
-
-struct StoriesView_Previews: PreviewProvider {
-    static let idsList = [1, 2, 3, 4, 5]
-    
-    static var previews: some View {
-        StoriesView(
-            idsList,
-            viewModel: BaseStoriesViewModel(storiesService: StoriesService()),
-            filledProgressColor: .red,
-            notFilledProgressColor: .gray,
-            changeStoryAnimation: .default,
-            content: { Text(String($0)) }
-        )
     }
 }
