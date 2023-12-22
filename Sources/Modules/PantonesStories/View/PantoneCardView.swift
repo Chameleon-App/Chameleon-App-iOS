@@ -22,10 +22,6 @@ struct PantoneCardView: View {
 }
 
 private struct CardSignatureView: View {
-    private enum Constants {
-        static let pantoneTitleKey = "pantoneTitle"
-    }
-    
     let name: String
     let number: String
     
@@ -36,11 +32,10 @@ private struct CardSignatureView: View {
                 .foregroundColor(Color(.backgroundCommon))
             
             VStack(alignment: .leading, spacing: 0) {
-                Text(String(localized: String.LocalizationValue(Constants.pantoneTitleKey)))
-                    .font(.pantoneTitle)
+                PantoneLogoView()
                     .padding(.bottom, 10)
                 
-                Text(number)
+                Text(number.uppercased())
                     .font(.pantoneSubtitle)
                     .padding(.bottom, 6)
                 
@@ -52,7 +47,25 @@ private struct CardSignatureView: View {
     }
 }
 
+private struct PantoneLogoView: View {
+    private enum Constants {
+        static let registeredSymbolKey = "registeredSymbol"
+        static let pantoneTitleKey = "pantoneTitle"
+    }
+    
+    var body: some View {
+        HStack(alignment: .top, spacing: 0) {
+            Text(String(localized: String.LocalizationValue(Constants.pantoneTitleKey)))
+                .font(.pantoneTitle)
+                .padding(.top, 6)
+            
+            Text(String(localized: String.LocalizationValue(Constants.registeredSymbolKey)))
+                .font(.pantoneSymbol)
+        }
+    }
+}
+
 #Preview {
-    PantoneCardView(name: "Viva Magenta", number: "18-1750 TCX")
+    PantoneCardView(name: "Viva Magenta", number: "18-1750 Tcx")
         .background { Color.gray.ignoresSafeArea() }
 }
