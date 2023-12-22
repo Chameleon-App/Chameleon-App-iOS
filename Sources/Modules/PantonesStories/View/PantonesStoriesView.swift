@@ -26,15 +26,21 @@ private struct PantoneStoryView: View {
     let pantone: PantoneModel
     
     var body: some View {
-        Color(hex: pantone.hex)
+        ZStack {
+            Color(hex: pantone.hex)
+            
+            PantoneCardView(name: pantone.name, number: pantone.number)
+                .padding(.horizontal, 28)
+                .padding([.top, .bottom], 168)
+        }
     }
 }
 
 struct PantonesStoriesView_Previews: PreviewProvider {
     static let pantonesOfDay = PantonesOfDayModel(
         pantones: [
-            PantoneModel(name: "Малиновый", number: "закат", hex: "#EF9CDA"),
-            PantoneModel(name: "Стекает", number: "по стене", hex: "#32CBFF")
+            PantoneModel(name: "Закат", number: "Малиновый", hex: "#EF9CDA"),
+            PantoneModel(name: "По стене", number: "Стекает", hex: "#32CBFF")
         ]
     )
     

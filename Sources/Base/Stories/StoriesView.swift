@@ -64,18 +64,18 @@ private struct StoriesHeaderView: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 16) {
+            Image(.ic16Close)
+                .padding(4)
+                .foregroundColor(filledProgressColor)
+                .background { Color(.iconSecondary).cornerRadius(10) }
+                .onTapGesture(perform: onCloseButtonTapAction)
+            
             StoriesProgressBarView(
                 progress: progress,
                 storiesCount: storiesCount,
                 filledProgressColor: filledProgressColor,
                 notFilledProgressColor: notFilledProgressColor
             )
-            
-            Image(.ic16Close)
-                .padding(4)
-                .foregroundColor(filledProgressColor)
-                .background { Color(.iconSecondary).cornerRadius(10) }
-                .onTapGesture(perform: onCloseButtonTapAction)
         }
     }
 }

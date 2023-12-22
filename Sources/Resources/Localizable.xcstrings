@@ -273,6 +273,23 @@
         }
       }
     },
+    "pantoneTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "PANTONE®"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PANTONE®"
+          }
+        }
+      }
+    },
     "passwordPlaceholderTitle" : {
       "extractionState" : "manual",
       "localizations" : {

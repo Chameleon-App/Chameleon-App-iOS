@@ -26,6 +26,7 @@ targets:
     info:
       path: Sources/Configurations/Info.plist
       properties:
+        UIAppFonts: [Helvetica-Bold.ttf]
         UIUserInterfaceStyle: Light
         SERVER_BASE_URL: $(SERVER_BASE_URL)
         UIRequiresFullScreen: true
