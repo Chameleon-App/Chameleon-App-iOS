@@ -44,6 +44,7 @@ struct SignupView: View {
                         if let selectedImage = viewModel.selectedImage {
                             Image(uiImage: selectedImage)
                                 .resizable()
+                                .scaledToFill()
                         } else {
                             ZStack {
                                 Color(.backgroundAccent)

@@ -57,9 +57,9 @@ struct TextFieldView: View {
                             SecureField(placeholderText, text: $inputText)
                         } else {
                             TextField(placeholderText, text: $inputText)
+                                
                         }
                     }
-                    .keyboardType(.alphabet)
                     .focused($isFocused)
                     .font(.bodyPrimary)
                     .foregroundColor(Color(.textPrimary))

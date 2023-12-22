@@ -36,6 +36,7 @@ final class SignupViewModel: ObservableObject {
     @Published var isErrorAlertPresented: Bool
     
     private let coordinator: SignupCoordinator
+    private let authenticationRepository: AuthenticationRepository
     
     init(coordinator: SignupCoordinator) {
         self.coordinator = coordinator
@@ -50,10 +51,11 @@ final class SignupViewModel: ObservableObject {
         self.checkPasswordInputText = .empty
         self.isCheckPasswordValid = false
         self.isErrorAlertPresented = false
+        self.authenticationRepository = AuthenticationRepository()
     }
     
     func handleSignupButtonDidTap() {
-        
+        Task { await signup() }
     }
     
     func handleLoginTitleDidTap() {
@@ -127,10 +129,6 @@ final class SignupViewModel: ObservableObject {
         isErrorAlertPresented = false
     }
     
-    private func openLoginScreen() {
-        Task { @MainActor in coordinator.openLoginScreen() }
-    }
-    
     private func handleIsUsernameValidDidSet() {
         setIsSignupButtonDisabled()
     }
@@ -162,10 +160,19 @@ final class SignupViewModel: ObservableObject {
     
     private func handleSelectedPhotoItemDidSet() {
         Task {
+            guard let selectedPhotoItem else {
+                return
+            }
+            
             guard
-                let imageData = try? await selectedPhotoItem?.loadTransferable(type: Data.self),
+                let imageData = try? await selectedPhotoItem.loadTransferable(type: Data.self),
                 let image = UIImage(data: imageData)
             else {
+                Task { @MainActor in
+                    self.selectedPhotoItem = nil
+                    self.selectedImage = nil
+                }
+                
                 return handleError()
             }
             
@@ -178,6 +185,30 @@ final class SignupViewModel: ObservableObject {
     }
     
     private func handleError() {
-        isErrorAlertPresented = true
+        Task { @MainActor in isErrorAlertPresented = true }
+    }
+    
+    private func signup() async {
+        let signupResult = await authenticationRepository.signup(
+            email: emailInputText,
+            username: usernameInputText,
+            password: passwordInputText,
+            profilePhotoJpegData: selectedImage?.jpegData(compressionQuality: .one)
+        )
+        
+        switch signupResult {
+        case .success:
+            openMainScreen()
+        case .failure:
+            handleError()
+        }
+    }
+    
+    private func openLoginScreen() {
+        Task { @MainActor in coordinator.openLoginScreen() }
+    }
+    
+    private func openMainScreen() {
+        Task { @MainActor in coordinator.openMainScreen() }
     }
 }
