@@ -159,8 +159,9 @@ private struct CalendarContentView: View {
                                 .frame(height: 20)
                         }
                     }
-                    .opacity(isActivityIndicatorPresented ? 0.25 : 1)
                     if isActivityIndicatorPresented {
+                        Color(.backgroundCommon)
+                            .opacity(isActivityIndicatorPresented ? 0.35 : 1)
                         VStack {
                             ProgressView()
                                 .controlSize(.large)
