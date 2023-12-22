@@ -1,11 +1,11 @@
 //
-//  LoginCoordinator.swift
+//  SignupCoordinator.swift
 //  chameleon
 //
-//  Created by Ilia Chub on 18.12.2023.
+//  Created by Ilia Chub on 21.12.2023.
 //
 
-final class LoginCoordinator {
+final class SignupCoordinator {
     weak var router: (NavigationRouter & RootRouter)?
     
     func openMainScreen() {
@@ -14,8 +14,8 @@ final class LoginCoordinator {
         router?.updateRootViewController(viewController: tabBarController)
     }
     
-    func openSignupScreen() {
-        let viewController = SignupFactory.createSignupViewController()
+    func openLoginScreen() {
+        let viewController = LoginFactory.createLoginViewController()
         
         router?.updateRootViewController(viewController: viewController)
     }

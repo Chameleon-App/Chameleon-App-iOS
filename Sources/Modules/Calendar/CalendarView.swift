@@ -53,7 +53,7 @@ struct CalendarContentCellViewItem: Identifiable, Equatable {
 struct CalendarView: View {
     private enum Constants {
         static let photoLoadingErrorTitleKey = "defaultErrorTitle"
-        static let photoLoadingButtonTitleKey = "loginErrorButtonTitle"
+        static let photoLoadingButtonTitleKey = "defaultErrorButtonTitle"
         static let photoLoadingDescriptionKey = "defaultErrorDescription"
     }
     
