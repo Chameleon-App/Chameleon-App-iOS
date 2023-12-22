@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct ProfileContentView: View {
+    private enum Constants {
+        static let gridBottomPadding: CGFloat = 20
+        static let horizontalPadding: CGFloat = 25
+    }
+
     let viewModel: ProfileViewModel
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 1),
@@ -25,10 +30,10 @@ struct ProfileContentView: View {
                             .aspectRatio(1, contentMode: .fit)
                     }
                 }
-                .padding(.bottom, 20)
+                .padding(.bottom, Constants.gridBottomPadding)
             }
         }
-        .padding(.horizontal, 1)
+        .padding(.horizontal, Constants.horizontalPadding)
     }
 }
 
