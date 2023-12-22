@@ -13,7 +13,7 @@ final class PantonesRepository {
             case getPantonesOfDayEndpoint = "/api/colors/today/"
         }
         
-        static let lastShowDateUserDefaultsKey = "authenticationToken"
+        static let lastShowDateUserDefaultsKey = "lastShowDate"
     }
     
     private let userDefaults = UserDefaults.standard
