@@ -31,7 +31,7 @@ private enum Constants {
 
 struct ProfileView: View {
     @ObservedObject var viewModel: ProfileViewModel
-    
+
     var body: some View {
         switch viewModel.viewState {
         case .loading:

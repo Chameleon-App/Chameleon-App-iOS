@@ -8,7 +8,6 @@
 import UIKit
 
 final class ProfileViewController: BaseHostingController<ProfileView> {
-    
     override var isNavigationBarHidden: Bool { true }
 
     init(viewModel: ProfileViewModel) {

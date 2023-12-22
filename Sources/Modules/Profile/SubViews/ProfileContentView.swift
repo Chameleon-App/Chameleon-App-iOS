@@ -11,7 +11,7 @@ private enum Constants {
     enum Layout {
         static let horizonalPadding: CGFloat = 10
         static let verticalPadding: CGFloat = 25
-        static let statisticSpacing: CGFloat = 40
+        static let statisticSpacing: CGFloat = 60
         static let statisticsHeight: CGFloat = 19
         static let profilePhotoSize: CGFloat = 75
     }
@@ -52,17 +52,14 @@ struct ProfileHeaderView: View {
     let viewModel: ProfileViewModel
 
     var body: some View {
-        HStack {
+        HStack(spacing: 10) {
             AsyncImageView(url: viewModel.profilePhoto, rounding: .max)
                 .frame(width: Constants.Layout.profilePhotoSize, height: Constants.Layout.profilePhotoSize)
-            Spacer()
             VStack(alignment: .leading, spacing: 7) {
                 Text(viewModel.username)
                     .font(.headingPrimary)
                 TripleProfileStaticticsView(viewItem: getTripleProfileStatisticsViewItem())
             }
-            .frame(width: 280)
-
         }
         .padding(.horizontal, Constants.Layout.horizonalPadding)
         .padding(.vertical, Constants.Layout.verticalPadding)
@@ -79,7 +76,6 @@ struct ProfileHeaderView: View {
     }
 }
 
-
 struct TripleProfileStatisticsViewItem: Equatable {
     let streak: ProfileStatisticViewItem
     let rating: ProfileStatisticViewItem
@@ -90,22 +86,18 @@ struct TripleProfileStaticticsView: View {
     let viewItem: TripleProfileStatisticsViewItem
 
     var body: some View {
-        HStack(alignment: .center, spacing: Constants.Layout.statisticSpacing) {
+        HStack(spacing: 40) {
             ProfileStasticsView(viewItem: viewItem.streak)
             ProfileStasticsView(viewItem: viewItem.rating)
             ProfileStasticsView(viewItem: viewItem.photos)
         }
+        .frame(maxWidth: .infinity)
     }
 }
 
 struct ProfileStatisticViewItem: Equatable {
     let name: String
     let score: String
-
-    init(name: String, score: String) {
-        self.name = name
-        self.score = score
-    }
 }
 
 struct ProfileStasticsView: View {
@@ -125,5 +117,3 @@ struct ProfileStasticsView: View {
         }
     }
 }
-
-
