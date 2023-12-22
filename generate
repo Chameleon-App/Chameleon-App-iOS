@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Generate .xcodeproj using XcodeGen
+xcodegen
+

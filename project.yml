@@ -1,0 +1,88 @@
+name: Chameleon
+variables:
+  appVersion: &app_version "0.1"
+options:
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  createIntermediateGroups: true
+  developmentLanguage: ru
+configs:
+  Debug: debug
+targets:
+  chameleon:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources/
+    settings:
+        base:
+            MARKETING_VERSION: *app_version
+            CURRENT_PROJECT_VERSION: "1"
+            SWIFT_VERSION: "5"
+            PRODUCT_NAME: Chameleon
+            PRODUCT_BUNDLE_IDENTIFIER: chameleon.chameleon-ios
+            CODE_SIGN_STYLE: Manual
+    info:
+      path: Sources/Configurations/Info.plist
+      properties:
+        UIAppFonts: [Helvetica-Bold.ttf]
+        UIUserInterfaceStyle: Light
+        SERVER_BASE_URL: $(SERVER_BASE_URL)
+        UIRequiresFullScreen: true
+        UIStatusBarStyle: UIStatusBarStyleLightContent
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        CFBundleDisplayName: $(BUNDLE_DISPLAY_NAME)
+        UIApplicationSupportsIndirectInputEvents: true
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: *app_version
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
+        UILaunchStoryboardName: LaunchScreen
+        NSAppTransportSecurity:
+            NSAllowsArbitraryLoads: YES
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+    configFiles:
+      Debug: Sources/Configurations/DebugConfiguration.xcconfig
+    preBuildScripts:
+      - script: |
+                export PATH="$PATH:/opt/homebrew/bin"
+
+                if which swiftlint >/dev/null; then
+                  swiftlint --config swiftlint.yml
+                else
+                  echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+                fi
+        name: SwiftLint
+        basedOnDependencyAnalysis: false
+    dependencies:
+      - package: Utils
+      - package: SnapKit
+      - package: Alamofire
+      - package: FormView
+      - package: SwiftyCrop
+      - package: Kingfisher
+packages:
+  Utils:
+    url: https://github.com/MobileUpLLC/Utils
+    exactVersion: 0.3.1
+  SnapKit:
+    url: https://github.com/SnapKit/SnapKit.git
+    exactVersion: 5.6.0
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire.git
+    exactVersion: 5.8.1
+  FormView:
+    url: https://github.com/MobileUpLLC/FormView
+    exactVersion: 1.1.2
+  SwiftyCrop:
+    url: https://github.com/benedom/SwiftyCrop
+    branch: master
+  Kingfisher:
+    url: https://github.com/onevcat/Kingfisher.git
+    exactVersion: 7.6.2
