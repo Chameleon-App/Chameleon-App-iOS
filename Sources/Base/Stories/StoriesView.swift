@@ -65,9 +65,7 @@ private struct StoriesHeaderView: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: 16) {
             Image(.ic16Close)
-                .padding(4)
                 .foregroundColor(filledProgressColor)
-                .background { Color(.iconSecondary).cornerRadius(10) }
                 .onTapGesture(perform: onCloseButtonTapAction)
             
             StoriesProgressBarView(
@@ -97,8 +95,6 @@ private struct StoriesProgressBarView: View {
                 )
             }
         }
-        .padding(8)
-        .background { Color(.iconSecondary).cornerRadius(10) }
     }
     
     private func getProgress(for storyNumber: Int) -> Double {
