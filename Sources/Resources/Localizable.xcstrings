@@ -426,7 +426,7 @@
         }
       }
     },
-    "photos" : {
+    "photosTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -460,7 +460,7 @@
         }
       }
     },
-    "rating" : {
+    "ratingTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -613,7 +613,7 @@
         }
       }
     },
-    "streak" : {
+    "streakTitle" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

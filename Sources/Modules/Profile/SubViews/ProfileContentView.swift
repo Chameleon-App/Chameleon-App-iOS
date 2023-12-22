@@ -7,22 +7,6 @@
 
 import SwiftUI
 
-private enum Constants {
-    enum Layout {
-        static let horizonalPadding: CGFloat = 10
-        static let verticalPadding: CGFloat = 25
-        static let statisticSpacing: CGFloat = 40
-        static let statisticsHeight: CGFloat = 19
-        static let profilePhotoSize: CGFloat = 75
-    }
-
-    enum Localization {
-        static let streak = "streak"
-        static let rating = "rating"
-        static let photos = "photos"
-    }
-}
-
 struct ProfileContentView: View {
     let viewModel: ProfileViewModel
     let columns: [GridItem] = [
@@ -49,13 +33,29 @@ struct ProfileContentView: View {
 }
 
 struct ProfileHeaderView: View {
+    private enum Constants {
+        enum Layout {
+            static let horizonalPadding: CGFloat = 10
+            static let verticalPadding: CGFloat = 25
+            static let profilePhotoSize: CGFloat = 75
+            static let hStachSpacing: CGFloat = 10
+            static let vStachSpacing: CGFloat = 7
+        }
+
+        enum Localization {
+            static let streak = "streakTitle"
+            static let rating = "ratingTitle"
+            static let photos = "photosTitle"
+        }
+    }
+
     let viewModel: ProfileViewModel
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: Constants.Layout.hStachSpacing) {
             AsyncImageView(url: viewModel.profilePhoto, rounding: .max)
                 .frame(width: Constants.Layout.profilePhotoSize, height: Constants.Layout.profilePhotoSize)
-            VStack(alignment: .leading, spacing: 7) {
+            VStack(alignment: .leading, spacing: Constants.Layout.vStachSpacing) {
                 Text(viewModel.username)
                     .font(.headingPrimary)
                 TripleProfileStaticticsView(viewItem: getTripleProfileStatisticsViewItem())
@@ -83,10 +83,13 @@ struct TripleProfileStatisticsViewItem: Equatable {
 }
 
 struct TripleProfileStaticticsView: View {
+    private enum Constants {
+        static let stackSpacing: CGFloat = 40
+    }
     let viewItem: TripleProfileStatisticsViewItem
 
     var body: some View {
-        HStack(spacing: 40) {
+        HStack(spacing: Constants.stackSpacing) {
             ProfileStasticsView(viewItem: viewItem.streak)
             ProfileStasticsView(viewItem: viewItem.rating)
             ProfileStasticsView(viewItem: viewItem.photos)
@@ -101,15 +104,18 @@ struct ProfileStatisticViewItem: Equatable {
 }
 
 struct ProfileStasticsView: View {
+    private enum Constants {
+        static let stackSpacing: CGFloat = 1
+        static let statisticsHeight: CGFloat = 19
+    }
     let viewItem: ProfileStatisticViewItem
     var body: some View {
-        VStack(spacing: 1) {
+        VStack(spacing: Constants.stackSpacing) {
             Text(viewItem.score)
                 .font(.titlePrimary)
                 .lineLimit(1)
                 .multilineTextAlignment(.center)
-                .frame(height: Constants.Layout.statisticsHeight)
-
+                .frame(height: Constants.statisticsHeight)
             Text(viewItem.name)
                 .font(.bodySmall)
                 .lineLimit(3)

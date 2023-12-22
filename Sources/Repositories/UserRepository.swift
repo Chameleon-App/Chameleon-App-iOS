@@ -14,9 +14,9 @@ final class UserRepository {
         static let authorizationHeaderKey = "Authorization"
     }
 
-    func getUser(authenticationToken: String) async -> ServerClientServiceResult<UserModel> {
+    func getUser(authenticationHeader: String) async -> ServerClientServiceResult<UserModel> {
         let headers: ServerClientServiceRequestHeaders = [
-            Constants.authorizationHeaderKey: authenticationToken
+            Constants.authorizationHeaderKey: authenticationHeader
         ]
 
         return await ServerClientService.shared.get(
