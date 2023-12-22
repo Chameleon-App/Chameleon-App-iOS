@@ -31,6 +31,7 @@ struct ProfileContentView: View {
                     }
                 }
                 .padding(.bottom, Constants.gridBottomPadding)
+                .animation(.default, value: viewModel.photos.count)
             }
         }
         .padding(.horizontal, Constants.horizontalPadding)
