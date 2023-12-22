@@ -66,6 +66,7 @@ targets:
       - package: Alamofire
       - package: FormView
       - package: SwiftyCrop
+      - package: Kingfisher
 packages:
   Utils:
     url: https://github.com/MobileUpLLC/Utils
@@ -82,3 +83,6 @@ packages:
   SwiftyCrop:
     url: https://github.com/benedom/SwiftyCrop
     branch: master
+  Kingfisher:
+    url: https://github.com/onevcat/Kingfisher.git
+    exactVersion: 7.6.2

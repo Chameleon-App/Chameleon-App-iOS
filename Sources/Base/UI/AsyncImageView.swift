@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 enum AsyncImageRounding {
     case radius(Double)
@@ -22,13 +23,11 @@ struct AsyncImageView: View {
     }
     
     var body: some View {
-        AsyncImage(url: url) {
-            $0
-                .resizable()
-        } placeholder: {
-            SkeletonView()
-        }
-        .cornerRadius(getCornerRadius())
+        KFImage
+            .url(url)
+            .resizable()
+            .placeholder { SkeletonView() }
+            .cornerRadius(getCornerRadius())
     }
     
     private func getCornerRadius() -> CGFloat {

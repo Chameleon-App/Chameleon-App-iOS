@@ -25,6 +25,10 @@ final class SearchViewModel: ObservableObject {
         configureUserInterface()
     }
     
+    func handleViewDidAppear() {
+        configureUserInterface()
+    }
+    
     private func configureUserInterface() {
         Task {
             switch await getPhotos() {

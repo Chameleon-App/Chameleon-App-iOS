@@ -19,7 +19,7 @@ struct LoginView: View {
         static let passwordTitleKey = "passwordTitle"
         static let passwordPlaceholderTitleKey = "passwordPlaceholderTitle"
         static let loginErrorTitleKey = "defaultErrorTitle"
-        static let loginErrorButtonTitleKey = "loginErrorButtonTitle"
+        static let loginErrorButtonTitleKey = "defaultErrorButtonTitle"
         static let loginErrorDescriptionKey = "defaultErrorDescription"
     }
     
