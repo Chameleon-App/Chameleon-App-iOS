@@ -58,9 +58,10 @@ final class ServerClientService {
         )
     }
     
-    func upload<ReturnValue: Decodable>(
+    func upload<ReturnValue: Decodable, Parameters: ServerClientServiceRequestParameters>(
         endpoint: String,
         jpegData: Data,
+        parameters: Parameters = EmptyParameters(),
         headers: ServerClientServiceRequestHeaders? = nil
     ) async -> ServerClientServiceResult<ReturnValue> {
         let url = getUrlString(endpoint: endpoint)
@@ -74,6 +75,17 @@ final class ServerClientService {
                         fileName: Constants.uploadingPhotoFileName,
                         mimeType: Constants.uploadingPhotoMimeType
                     )
+                    
+                    if
+                        let encodedParameters = try? JSONEncoder().encode(parameters),
+                        let jsonObject = try? JSONSerialization.jsonObject(with: encodedParameters) as? [String: Any] 
+                    {    
+                        for (key, value) in jsonObject {
+                            if let valueData = "\(value)".data(using: .utf8) {
+                                $0.append(valueData, withName: key)
+                            }
+                        }
+                    }
                 },
                 to: url,
                 headers: headers
