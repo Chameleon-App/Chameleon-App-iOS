@@ -83,13 +83,15 @@ final class ProfileViewModel: ObservableObject {
     }
 
     private func updateViewModel(with profile: UserModel, photoViewItems: [EvaluationFeedImageViewItem]) {
-        id = profile.id
-        username = profile.username
-        profilePhoto = profile.profilePhoto
-        totalPhotos = String(profile.totalPhotos)
-        totalRating = String(profile.totalRating)
-        currentStreak = String(profile.currentStreak)
-        photos = photoViewItems
+        Task { @MainActor in
+            id = profile.id
+            username = profile.username
+            profilePhoto = profile.profilePhoto 
+            totalPhotos = String(profile.totalPhotos)
+            totalRating = String(profile.totalRating)
+            currentStreak = String(profile.currentStreak)
+            photos = photoViewItems
+        }
     }
 
     private func openLoginScreen() {
