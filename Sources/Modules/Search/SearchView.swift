@@ -21,14 +21,17 @@ struct SearchView: View {
     @ObservedObject var viewModel: SearchViewModel
     
     var body: some View {
-        switch viewModel.viewState {
-        case .loading:
-            SearchLoadingView()
-        case .content(let contentViewItem):
-            SearchContentView(viewItem: contentViewItem)
-        case .error:
-            SearchErrorView()
+        Group {
+            switch viewModel.viewState {
+            case .loading:
+                SearchLoadingView()
+            case .content(let contentViewItem):
+                SearchContentView(viewItem: contentViewItem)
+            case .error:
+                SearchErrorView()
+            }
         }
+        .onAppear { viewModel.handleViewDidAppear() }
     }
 }
 
@@ -57,6 +60,7 @@ private struct SearchContentView: View {
                 }
             }
             .padding(.bottom, 20)
+            .animation(.default, value: viewItem.photos.count)
         }
         .padding(.horizontal, 1)
     }
